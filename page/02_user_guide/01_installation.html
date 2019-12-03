@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Library to compute exchange-correlation energies and potentials">
+    
+    <meta name="author" content="Jose Soler, Alberto Garcia" >
+    <link rel="icon" href="../../favicon.png">
+
+    <title>Installation &ndash; libGridXC</title>
+
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/pygments.css" rel="stylesheet">
+    <link href="../../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../css/local.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../../js/jquery-2.1.3.min.js"></script>
+    <script src="../../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">libGridXC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../../page/index.html'>Overview</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../../lists/procedures.html">Procedures</a></li>
+        
+               
+        
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/procedures.html">Procedures</a></li>
+
+                             
+
+          </ul>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  <div class="row">
+    <h1>Installation</h1>
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="well well-sm" style="min-height: 40px;">
+      <ul class="list-inline" style="margin-bottom:0px; display:inline">
+         
+         
+<!--
+        
+-->
+      </ul>
+        <ol class="breadcrumb in-well">
+      
+         <li><a href='../../page/index.html'>Overview</a></li>
+      
+         <li><a href='../../page/02_user_guide/index.html'>libGridXC User Guide</a></li>
+      
+         <li class="active">Installation</li>
+      </ol>
+    </div>
+    </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-9 col-md-push-3" id='text'>
+      <h2 id="pre-requisites">Pre-requisites</h2>
+<ul>
+<li>The <a href="https://gitlab.com/libxc/libxc/-/tags">LibXC library</a> (optional but strongly recommended).</li>
+</ul>
+<h2 id="installation-of-libgridxc">Installation of libGridXC</h2>
+<p>Assuming that LibXC is installed in <code>${LIBXC_ROOT}</code> and that the
+MPI-extended Fortran and C compilers are given by MPIFC and MPICC,
+respectively, the following sequences of commands will install appropriate flavors of libGridXC in the
+<code>${GRIDXC_ROOT}</code> installation directory:</p>
+<h3 id="serial-version">Serial version</h3>
+<div class="codehilite"><pre><span></span>    ./configure --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+    make
+    make check
+    make install
+</pre></div>
+
+
+<h3 id="mpi-version">MPI version</h3>
+<div class="codehilite"><pre><span></span>    FC=<span class="nv">$MPIFC</span> CC=<span class="nv">$MPICC</span> ../configure --with-mpi=<span class="cp">${</span><span class="n">MPI_ROOT</span><span class="cp">}</span> --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+    make
+    make check
+    make install
+</pre></div>
+
+
+<h3 id="single-precision-version">Single-precision version</h3>
+<p>This affects only the arrays handled by <code>gridxc_cellxc</code>. The spherical-grid interface always works in double-precision.</p>
+<div class="codehilite"><pre><span></span>    ../configure  --enable-single-precision --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+    make
+    make check
+    make install
+</pre></div>
+
+
+<p>The above buildings will result in installation directories with the following structure:</p>
+<div class="codehilite"><pre><span></span><span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>:
+├── include
+│   └── gridxc
+│       ├── debugxc.mod
+        .... (other .mod files)
+│       └── xcmod.mod
+├── lib
+        ...
+│   ├── libgridxc.a
+        ...
+</pre></div>
+
+
+<p>so that to have different versions installed at the same time one
+would have to specify different names (e.g., gridxc, gridxc-mpi,
+gridxc-sp, gridxc-sp-mpi, etc) for the installation directory. An
+alternative, more compact way, is presented in the next section.</p>
+<h3 id="multi-configuration-installation">Multi-configuration installation</h3>
+<p>Using the <code>--enable-multiconfig</code> configure option, multiple
+flavors of the library with different options can coexist in the
+same root installation directory. For example,</p>
+<div class="codehilite"><pre><span></span>    ./configure --enable-multiconfig --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+    make
+    make check
+    make install
+
+    FC=<span class="nv">$MPIFC</span> CC=<span class="nv">$MPICC</span> ../configure --enable-multiconfig  --with-mpi=<span class="cp">${</span><span class="n">MPI_ROOT</span><span class="cp">}</span> --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+    make
+    make check
+    make install
+</pre></div>
+
+
+<p>will result in</p>
+<div class="codehilite"><pre><span></span><span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>:
+├── include
+│   ├── gridxc_dp
+│   │   ├── gridxc.mod
+        ...
+│   └── gridxc_dp_mpi
+│       ├── gridxc.mod
+        ...
+├── lib
+        ...
+│   ├── libgridxc_dp.a
+│   ├── libgridxc_dp_mpi.a
+</pre></div>
+
+
+<p>This idea can be extended to the single/double precision options. The
+script <code>multiconfig-build.sh</code> in the top level of the distribution can
+be used to configure, compile, and install all available flavors of the library:</p>
+<div class="codehilite"><pre><span></span>gridxc_dp
+gridxc_dp_mpi
+gridxc_sp
+gridxc_sp_mpi
+</pre></div>
+
+
+<p>This is recommended procedure for production versions of the library. The script should be invoked with
+the appropriate variables in the environment. For example: (note the escaped newlines):</p>
+<div class="codehilite"><pre><span></span>FC=gfortran  MPIFC=mpif90  MPICC=mpicc \
+LIBXC_ROOT=/path/to/libxc/installation \
+MPI_ROOT=/path/to/mpi/installation \
+GRIDXC_PREFIX=/path/to/desired/installation  sh multiconfig-build.sh
+</pre></div>
+
+
+<h2 id="compiling-user-programs">Compiling user programs</h2>
+<p>Using the multi-config option discussed above, the appropriate modules
+will be in <code>$GRIDXC_ROOT/include/gridxc_&lt;flavor&gt;</code>, and the library
+file will be <code>$GRIDXC_ROOT/lib/libgridxc_&lt;flavor&gt;.a</code>, where <code>$GRIDXC_ROOT</code> is the value
+of the <code>GRIDXC_PREFIX</code> installation option above.</p>
+    </div>
+    
+    <div class="col-md-3 col-md-pull-9">
+      <hr class="visible-xs visible-sm">
+        <div class="well toc">
+          <ul class="nav nav-stacked nav-pills">
+            <li role="presentation" class="title"><a href='../../page/index.html'>Overview</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-stacked nav-pills">
+            
+            <li role="presentation">
+            <a href='../../page/02_user_guide/index.html'>libGridXC User Guide</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation" class="disabled">
+            <a href='../../page/02_user_guide/01_installation.html'>Installation</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../../page/02_user_guide/02_api/index.html'>libGridXC API</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation">
+            <a href='../../page/02_user_guide/02_api/functionals.html'>Guide to functionals</a>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+          </ul>
+        </div>
+    </div>
+    
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2019 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> libGridXC was developed by Jose Soler, Alberto Garcia</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    
+  </body>
+</html>

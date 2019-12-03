@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Library to compute exchange-correlation energies and potentials">
+    
+    <meta name="author" content="Jose Soler, Alberto Garcia" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>config.sh &ndash; libGridXC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">libGridXC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Overview</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+        
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+
+          </ul>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>config.sh
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/config.sh"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">config.sh</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/config.sh.html#src">config.sh</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+      
+      
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/config.sh.html#src">config.sh</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="ch">#!/bin/sh</span>
+<a name="ln-2"></a><span class="c1">#</span>
+<a name="ln-3"></a><span class="c1">##set -x</span>
+<a name="ln-4"></a><span class="c1">#</span>
+<a name="ln-5"></a><span class="c1"># Get absolute path of this script, as that will be the Src directory to use</span>
+<a name="ln-6"></a><span class="c1"># as reference when copying files.</span>
+<a name="ln-7"></a><span class="c1"># </span>
+<a name="ln-8"></a><span class="c1">#</span>
+<a name="ln-9"></a><span class="nv">srcdir</span><span class="o">=</span><span class="k">$(</span>
+<a name="ln-10"></a><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="k">$(</span>dirname -- <span class="s2">&quot;</span><span class="nv">$0</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">&amp;&amp;</span>
+<a name="ln-11"></a><span class="nb">pwd</span> -P
+<a name="ln-12"></a><span class="k">)</span>
+<a name="ln-13"></a><span class="c1"># The above construct is more robust than:  srcdir=$(dirname $0)</span>
+<a name="ln-14"></a><span class="c1"># (It will work if $0 is &quot;../Src&quot;, since we want an *absolute* path</span>
+<a name="ln-15"></a><span class="c1">#</span>
+<a name="ln-16"></a><span class="c1"># Get also the absolute path of the object directory</span>
+<a name="ln-17"></a><span class="c1">#</span>
+<a name="ln-18"></a><span class="nv">objdir</span><span class="o">=</span><span class="k">$(</span>
+<a name="ln-19"></a><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span> <span class="o">&amp;&amp;</span>
+<a name="ln-20"></a><span class="nb">pwd</span> -P
+<a name="ln-21"></a><span class="k">)</span>
+<a name="ln-22"></a><span class="c1">#</span>
+<a name="ln-23"></a><span class="nv">destdir</span><span class="o">=</span><span class="nv">$objdir</span>
+<a name="ln-24"></a><span class="c1">#</span>
+<a name="ln-25"></a><span class="c1"># Copy test material</span>
+<a name="ln-26"></a><span class="c1">#</span>
+<a name="ln-27"></a><span class="o">(</span><span class="nb">cd</span> <span class="nv">$srcdir</span><span class="p">;</span> <span class="nb">cd</span> .. <span class="p">;</span> cp -rp Testers <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span> <span class="o">)</span>
+<a name="ln-28"></a><span class="c1">#</span>
+<a name="ln-29"></a><span class="c1"># Copy and change name of makefiles. The &#39;.alt&#39; suffix was used to avoid</span>
+<a name="ln-30"></a><span class="c1"># clashes with the auto-tools automatically-generated files.</span>
+<a name="ln-31"></a><span class="c1">#</span>
+<a name="ln-32"></a><span class="o">(</span>
+<a name="ln-33"></a> cp <span class="nv">$srcdir</span>/makefile.alt <span class="nv">$destdir</span>/makefile
+<a name="ln-34"></a> <span class="nb">cd</span> <span class="nv">$destdir</span>/Testers<span class="p">;</span> mv makefile.alt makefile
+<a name="ln-35"></a><span class="o">)</span>
+<a name="ln-36"></a><span class="c1">#</span>
+<a name="ln-37"></a><span class="c1"># Replicate any .inc files</span>
+<a name="ln-38"></a><span class="c1"># This is needed in some systems with broken include file import heuristics</span>
+<a name="ln-39"></a><span class="c1">#</span>
+<a name="ln-40"></a><span class="o">(</span><span class="nb">cd</span> <span class="nv">$srcdir</span><span class="p">;</span>
+<a name="ln-41"></a>  <span class="k">for</span> i in <span class="k">$(</span>find . -name <span class="s1">&#39;*.inc&#39;</span> <span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+<a name="ln-42"></a>    <span class="nv">relpath</span><span class="o">=</span><span class="si">${</span><span class="nv">i</span><span class="p">%/*</span><span class="si">}</span>
+<a name="ln-43"></a>    mkdir -p <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>/<span class="nv">$relpath</span>
+<a name="ln-44"></a>    cp -f <span class="nv">$relpath</span>/*.inc <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>/<span class="nv">$relpath</span>
+<a name="ln-45"></a>  <span class="k">done</span>
+<a name="ln-46"></a><span class="o">)</span>
+<a name="ln-47"></a><span class="c1">#</span>
+<a name="ln-48"></a><span class="c1">#</span>
+<a name="ln-49"></a><span class="c1"># Copy other needed top-level files</span>
+<a name="ln-50"></a><span class="c1">#</span>
+<a name="ln-51"></a>cp -p <span class="nv">$srcdir</span>/build.sh <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>
+<a name="ln-52"></a>cp -p <span class="nv">$srcdir</span>/gridxc.mk.in <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>
+<a name="ln-53"></a>cp -p <span class="nv">$srcdir</span>/libxc.mk <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>
+<a name="ln-54"></a>cp -p <span class="nv">$srcdir</span>/top.gridxc.mk.in <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>
+<a name="ln-55"></a><span class="c1">#</span>
+<a name="ln-56"></a><span class="c1"># Set the appropiate variables in the build makefile</span>
+<a name="ln-57"></a><span class="c1">#</span>
+<a name="ln-58"></a>sed <span class="s2">&quot;s#VPATH=\.#VPATH=</span><span class="si">${</span><span class="nv">srcdir</span><span class="si">}</span><span class="s2">#g&quot;</span> <span class="si">${</span><span class="nv">srcdir</span><span class="si">}</span>/makefile.alt <span class="p">|</span> <span class="se">\</span>
+<a name="ln-59"></a>sed <span class="s2">&quot;s#MAIN_OBJDIR=\.#MAIN_OBJDIR=</span><span class="si">${</span><span class="nv">objdir</span><span class="si">}</span><span class="s2">#g&quot;</span> &gt; <span class="si">${</span><span class="nv">destdir</span><span class="si">}</span>/makefile
+<a name="ln-60"></a>
+<a name="ln-61"></a><span class="c1">#</span>
+<a name="ln-62"></a><span class="nb">echo</span> <span class="s2">&quot; *** Compilation setup done. &quot;</span>
+<a name="ln-63"></a>
+<a name="ln-64"></a><span class="c1">## for i in $(find . \( -path Tutorial -o -path Examples \) -prune -o \</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2019 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> libGridXC was developed by Jose Soler, Alberto Garcia</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    
+  </body>
+</html>

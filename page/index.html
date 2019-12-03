@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Library to compute exchange-correlation energies and potentials">
+    
+    <meta name="author" content="Jose Soler, Alberto Garcia" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>Overview &ndash; libGridXC</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">libGridXC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Overview</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+        
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+
+          </ul>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  <div class="row">
+    <h1>Overview</h1>
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="well well-sm" style="min-height: 40px;">
+      <ul class="list-inline" style="margin-bottom:0px; display:inline">
+         
+         
+<!--
+        
+        <li><i class="fa fa-sitemap"></i> Subsections:</li>
+        
+        <li><a href='../page/02_user_guide/index.html'>libGridXC User Guide</a></li>
+        
+        
+-->
+      </ul>
+        <ol class="breadcrumb in-well">
+      
+         <li class="active">Overview</li>
+      </ol>
+    </div>
+    </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-9 col-md-push-3" id='text'>
+      <p>The libGridXC library started life as SiestaXC, a collection of
+modules within Siesta to compute the exchange-correlation energy and
+potential in DFT calculations for atomic and periodic systems. The
+''grid'' part of the name refers to the discretization for charge
+density and potential used in those calculations. The original code
+included a set of low-level routines to compute <script type="math/tex">\epsilon_{xc}({\bf
+r})</script> and <script type="math/tex">V_{xc}({\bf r})</script> at a point for LDA and GGA functionals
+(i.e., a subset of the functionality now offered by LibXC), and two
+high-level routines to handle the computations in the whole domain,
+with radial or 3D-periodic grids), including any needed computations
+of gradients, integrations, etc.</p>
+<p>In addition, SiestaXC pioneered the implementation of efficient and
+practical algorithms for support of van der Waals functionals, which
+are typically the sum of three pieces: an exchange energy from a
+suitable GGA functional, an LDA correlation energy, and a non-local
+correlation term</p>
+<p>
+<script type="math/tex; mode=display">\begin{align}
+E_{\mathrm{xc}}[n] = E_{\mathrm x}^{\mathrm{GGA}}[n] + E_{\mathrm
+c}^{\mathrm{LDA}}[n] + E_{\mathrm{c}}^{\mathrm{nl}}[n].
+\end{align}
+</script>
+</p>
+<p>The last term is a double integral over a kernel function
+<script type="math/tex">\phi(\mathbf r, \mathbf r')</script>:</p>
+<p>
+<script type="math/tex; mode=display">
+\begin{align}
+E_{\mathrm{c}}^{\mathrm{nl}}[n] = \frac12 \iint
+n(\mathbf r) \phi(\mathbf r, \mathbf r') n(\mathbf r') \, \mathrm d
+\mathbf r \, \mathrm d \mathbf r'.
+\end{align}
+</script>
+</p>
+<p>whose computation was made affordable by the techniques described in
+<a href="https://link.aps.org/doi/10.1103/PhysRevLett.103.096102">the work by Roman-Perez and Soler</a>.</p>
+<p>The current libGridXC retains most of the SiestaXC functionality, and
+enhances it by offering an interface to libxc that supports a much
+wider selection of XC functionals. The code has been streamlined and
+re-packaged into a proper stand-alone library, with an automatic
+build-system.</p>
+    </div>
+    
+    <div class="col-md-3 col-md-pull-9">
+      <hr class="visible-xs visible-sm">
+        <div class="well toc">
+          <ul class="nav nav-stacked nav-pills">
+            <li role="presentation" class="title disabled"><a href='../page/index.html'>Overview</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-stacked nav-pills">
+            
+            <li role="presentation">
+            <a href='../page/02_user_guide/index.html'>libGridXC User Guide</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation">
+            <a href='../page/02_user_guide/01_installation.html'>Installation</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../page/02_user_guide/02_api/index.html'>libGridXC API</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation">
+            <a href='../page/02_user_guide/02_api/functionals.html'>Guide to functionals</a>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+          </ul>
+        </div>
+    </div>
+    
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2019 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> libGridXC was developed by Jose Soler, Alberto Garcia</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    
+  </body>
+</html>

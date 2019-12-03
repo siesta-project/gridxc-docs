@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="Library to compute exchange-correlation energies and potentials">
+    
+    <meta name="author" content="Jose Soler, Alberto Garcia" >
+    <link rel="icon" href="../../../favicon.png">
+
+    <title>libGridXC API &ndash; libGridXC</title>
+
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../css/pygments.css" rel="stylesheet">
+    <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../../css/local.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../../../js/jquery-2.1.3.min.js"></script>
+    <script src="../../../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../../index.html">libGridXC </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../../../page/index.html'>Overview</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../../../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../../../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../../../lists/procedures.html">Procedures</a></li>
+        
+               
+        
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../../lists/procedures.html">Procedures</a></li>
+
+                             
+
+          </ul>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  <div class="row">
+    <h1>libGridXC API</h1>
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="well well-sm" style="min-height: 40px;">
+      <ul class="list-inline" style="margin-bottom:0px; display:inline">
+         
+         
+<!--
+        
+        <li><i class="fa fa-sitemap"></i> Subsections:</li>
+        
+        <li><a href='../../../page/02_user_guide/02_api/functionals.html'>Guide to functionals</a></li>
+        
+        
+-->
+      </ul>
+        <ol class="breadcrumb in-well">
+      
+         <li><a href='../../../page/index.html'>Overview</a></li>
+      
+         <li><a href='../../../page/02_user_guide/index.html'>libGridXC User Guide</a></li>
+      
+         <li class="active">libGridXC API</li>
+      </ol>
+    </div>
+    </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-9 col-md-push-3" id='text'>
+      <div class="toc">
+<ul>
+<li><a href="#exported-types-and-parameters">Exported types and parameters</a></li>
+<li><a href="#initialization-routine">Initialization routine</a></li>
+<li><a href="#selection-of-xc-functionals">Selection of XC functionals</a></li>
+<li><a href="#main-routines">Main routines</a><ul>
+<li><a href="#atomic-spherical-grids">Atomic (spherical) grids</a></li>
+<li><a href="#box-periodical-grids">Box (periodical) grids</a></li>
+</ul>
+</li>
+<li><a href="#other-exported-functionality">Other exported functionality</a><ul>
+<li><a href="#convenience-utilities">Convenience utilities</a></li>
+<li><a href="#lower-level-entry-points">Lower level entry points</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Access to the library's functionality is provided by importing the <a href="../../../module/gridxc.html">gridXC</a> module:</p>
+<div class="codehilite"><pre><span></span>use gridxc
+</pre></div>
+
+
+<p>which exports the interfaces to the public user-level routines and other symbols.</p>
+<p></p><div class="alert alert-info" role="alert"><h4>Note</h4><p>most routines and symbols
+are <strong>prefixed</strong> by <code>gridxc</code> for export, whereas internally the <code>gridxc</code> prefix is not currently used. This means that
+this API reference will have cross-references to routine names without the prefix.
+</p></div>
+<p>
+<h2 id="exported-types-and-parameters">Exported types and parameters</h2>
+<p>The library exports the kind parameter <code>grid_p</code> appropriate for the
+arrays passed to a from the <a href="../../../proc/cellxc.html">cellXC</a> routine. This is
+controlled by the setting of the <code>--enable-single-precision</code> configure
+option (by default, a double-precision kind is returned).</p>
+<h2 id="initialization-routine">Initialization routine</h2>
+<p>It is necessary to call the <a href="../../../proc/gridxc_init.html">gridxc_init</a> routine before any other operations. Currently, this routine just
+sets a few internal variables. If working in parallel, the MPI communicator is passed in this call.</p>
+<h2 id="selection-of-xc-functionals">Selection of XC functionals</h2>
+<ul>
+<li>The routine <a href="../../../proc/setxc.html">setXC</a> and its simpler variants <a href="../../../proc/setxc_libxc_ids.html">setXC_libxc_ids</a> and <a href="../../../proc/setxc_family_authors.html">setXC_family_authors</a> select the
+functionals to use.   The available functionals and the syntax for their
+specification are discussed in the <a href="./functionals.html">Guide to functionals</a>.
+This information is currently stored in global
+module variables, and can be retrieved with the <a href="../../../proc/getxc.html">getXC</a> routine.</li>
+</ul>
+<h2 id="main-routines">Main routines</h2>
+<h3 id="atomic-spherical-grids">Atomic (spherical) grids</h3>
+<ul>
+<li>Routine <a href="../../../proc/atomxc.html">atomXC</a> computes the exchange-correlation energies and potential for a spherical charge density, as given
+  in a radial grid.</li>
+</ul>
+<h3 id="box-periodical-grids">Box (periodical) grids</h3>
+<ul>
+<li>Routine <a href="../../../proc/cellxc.html">cellXC</a> is the major workhorse of the library. It
+  computes the exchange-correlation energies and potential for a
+  periodical charge density, represented in a (possibly distributed in parallel) parallepipedic grid.</li>
+</ul>
+<h2 id="other-exported-functionality">Other exported functionality</h2>
+<p>(See the source for full documentation)</p>
+<h3 id="convenience-utilities">Convenience utilities</h3>
+<p>A few routines are exported for convenience to some user programs:</p>
+<ul>
+<li>
+<p>gridxc_nfft: When VDW functionals are used, the library employs internally FFT routines that need the mesh sizes to be multiples of 2, 3, or 5. This routine (see the source) will help to determine the appropriate values.</p>
+</li>
+<li>
+<p>setmeshdistr/meshBox: These routines can be used to select an appropriate data distribution in parallel. See the source for more information. These are in the process of refactoring to make them truly stand-alone.</p>
+</li>
+</ul>
+<h3 id="lower-level-entry-points">Lower level entry points</h3>
+<ul>
+<li>gridxc_ldaxc</li>
+<li>gridxc_ggaxc</li>
+</ul>
+    </div>
+    
+    <div class="col-md-3 col-md-pull-9">
+      <hr class="visible-xs visible-sm">
+        <div class="well toc">
+          <ul class="nav nav-stacked nav-pills">
+            <li role="presentation" class="title"><a href='../../../page/index.html'>Overview</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-stacked nav-pills">
+            
+            <li role="presentation">
+            <a href='../../../page/02_user_guide/index.html'>libGridXC User Guide</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation">
+            <a href='../../../page/02_user_guide/01_installation.html'>Installation</a>
+            
+            </li>
+            
+            <li role="presentation" class="disabled">
+            <a href='../../../page/02_user_guide/02_api/index.html'>libGridXC API</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation">
+            <a href='../../../page/02_user_guide/02_api/functionals.html'>Guide to functionals</a>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+          </ul>
+        </div>
+    </div>
+    
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2019 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+            
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> libGridXC was developed by Jose Soler, Alberto Garcia</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../../../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    
+  </body>
+</html>
