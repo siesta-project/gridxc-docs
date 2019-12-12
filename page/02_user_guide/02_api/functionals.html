@@ -123,7 +123,7 @@
   <div class="row">
     <div class="col-md-9 col-md-push-3" id='text'>
       <p>The library provides a collection of built-in functionals, coded by
-J.M. Soler and C. Balbás, and an interface to the LibXC library for a
+J.M. Soler and C. Balbás, and an interface to the <a href="https://www.tddft.org/programs/libxc/">LibXC</a> library for a
 wider selection of semi-local (LDA and GGA) functionals. Support for
 the MGGA functionals in LibXC is being implemented.</p>
 <h2 id="built-in-functionals">Built-in functionals</h2>
@@ -174,11 +174,12 @@ appropriate weight. For example,</p>
 
 <p>will use a cocktail of PBE and WC in which the exchange part is 100% PBE, and the correlation part is 75% PBE and 25% WC.</p>
 <h2 id="libxc-interface">LibXC interface</h2>
-<p>In LibXC, most functionals are split by exchange and correlation
-parts. For example, there are separate functionals for the exchange
-and corrrelation parts of PBE, respectively XC_GGA_X_PBE (id 101) and
-XC_GGA_C_PBE (id 130). The <em>id</em> or functional number, while not human
-friendly, is the recommended way of identification for full compatibility.</p>
+<p>In <a href="https://www.tddft.org/programs/libxc/functionals">LibXC</a>, most
+functionals are split by exchange and correlation parts. For example,
+there are separate functionals for the exchange and corrrelation parts
+of PBE, respectively XC_GGA_X_PBE (id 101) and XC_GGA_C_PBE (id
+130). The <em>id</em> or functional number, while not human friendly, is the
+recommended way of identification for full compatibility.</p>
 <p>To tell libGridXC that a PBE functional from LibXC is desired, we can use the call:</p>
 <div class="codehilite"><pre><span></span>  call setXC_libxc_ids ( 2, (/ 101, 130 /) )
 </pre></div>
