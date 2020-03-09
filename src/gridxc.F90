@@ -64,7 +64,7 @@ MODULE gridXC
 
 ! Extra utilities placed here for convenience
 ! See correspondig modules for usage documentation
-  USE m_fft_gpfa,    only: gridxc_nfft => nfft  ! Get allowed sizes for FFTs
+  USE gridxc_fft_gpfa,    only: gridxc_nfft => nfft  ! Get allowed sizes for FFTs
 !----------------------------------------------------------------------
 !-----------------------------------
 #ifdef DEBUG_XC
