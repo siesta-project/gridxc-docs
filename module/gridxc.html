@@ -113,7 +113,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 1.3% of total for modules and submodules.">16 statements</a>
+    title=" 0.3% of total for modules and submodules.">16 statements</a>
      </li> 
      
      
@@ -177,36 +177,36 @@
     </div>
     
     <div class="col-md-9" id='text'>
-    <div class="codehilite"><pre><span></span> Provides the following main XC routines:
+    <div class="codehilite"><pre><span></span><code> <span class="n">Provides</span> <span class="n">the</span> <span class="n">following</span> <span class="n">main</span> <span class="n">XC</span> <span class="n">routines</span><span class="p">:</span>
 
-   gridxc_init     ! Initialization
+   <span class="n">gridxc_init</span>     <span class="o">!</span> <span class="n">Initialization</span>
 
-   gridxc_atomXC   ! XC for a spherical charge distribution
-   gridxc_cellXC   ! XC for a periodic unit cell
-   gridxc_setXC    ! Sets XC functional(s) to be used by atomXC and/or cellXC
+   <span class="n">gridxc_atomXC</span>   <span class="o">!</span> <span class="n">XC</span> <span class="k">for</span> <span class="n">a</span> <span class="n">spherical</span> <span class="n">charge</span> <span class="n">distribution</span>
+   <span class="n">gridxc_cellXC</span>   <span class="o">!</span> <span class="n">XC</span> <span class="k">for</span> <span class="n">a</span> <span class="n">periodic</span> <span class="n">unit</span> <span class="n">cell</span>
+   <span class="n">gridxc_setXC</span>    <span class="o">!</span> <span class="k">Sets</span> <span class="n">XC</span> <span class="n">functional</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">to</span> <span class="n">be</span> <span class="n">used</span> <span class="k">by</span> <span class="n">atomXC</span> <span class="k">and</span><span class="o">/</span><span class="k">or</span> <span class="n">cellXC</span>
 
-   (For the latter there are two simpler alternatives:
-   gridxc_setxc_family_authors(family,authors)
-   gridxc_setxc_libxc_ids(nfuncs,libxc_ids)
-   )
+   <span class="p">(</span><span class="k">For</span> <span class="n">the</span> <span class="n">latter</span> <span class="n">there</span> <span class="k">are</span> <span class="n">two</span> <span class="n">simpler</span> <span class="n">alternatives</span><span class="p">:</span>
+   <span class="n">gridxc_setxc_family_authors</span><span class="p">(</span><span class="n">family</span><span class="p">,</span><span class="n">authors</span><span class="p">)</span>
+   <span class="n">gridxc_setxc_libxc_ids</span><span class="p">(</span><span class="n">nfuncs</span><span class="p">,</span><span class="n">libxc_ids</span><span class="p">)</span>
+   <span class="p">)</span>
 
-   gridxc_getXC    ! Returns the XC functional(s) being used
+   <span class="n">gridxc_getXC</span>    <span class="o">!</span> <span class="k">Returns</span> <span class="n">the</span> <span class="n">XC</span> <span class="n">functional</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="n">being</span> <span class="n">used</span>
 
- Real kinds (precision) of arguments to call atomxc and cellxc
-   grid_p ! Precision for grid arrays to call cellxc
- Secondary entry points for testers and lower-level programming
-   gridxc_ldaxc    ! LDA-XC functionals
-   gridxc_ggaxc    ! GGA-XC functionals
- Extra utilities placed here for non-siesta users
- See correspondig modules in the source for usage documentation
+ <span class="nb">Real</span> <span class="n">kinds</span> <span class="p">(</span><span class="k">precision</span><span class="p">)</span> <span class="k">of</span> <span class="n">arguments</span> <span class="k">to</span> <span class="k">call</span> <span class="n">atomxc</span> <span class="k">and</span> <span class="n">cellxc</span>
+   <span class="n">grid_p</span> <span class="o">!</span> <span class="k">Precision</span> <span class="k">for</span> <span class="n">grid</span> <span class="n">arrays</span> <span class="k">to</span> <span class="k">call</span> <span class="n">cellxc</span>
+ <span class="n">Secondary</span> <span class="n">entry</span> <span class="n">points</span> <span class="k">for</span> <span class="n">testers</span> <span class="k">and</span> <span class="k">lower</span><span class="o">-</span><span class="k">level</span> <span class="n">programming</span>
+   <span class="n">gridxc_ldaxc</span>    <span class="o">!</span> <span class="n">LDA</span><span class="o">-</span><span class="n">XC</span> <span class="n">functionals</span>
+   <span class="n">gridxc_ggaxc</span>    <span class="o">!</span> <span class="n">GGA</span><span class="o">-</span><span class="n">XC</span> <span class="n">functionals</span>
+ <span class="n">Extra</span> <span class="n">utilities</span> <span class="n">placed</span> <span class="n">here</span> <span class="k">for</span> <span class="n">non</span><span class="o">-</span><span class="n">siesta</span> <span class="n">users</span>
+ <span class="n">See</span> <span class="n">correspondig</span> <span class="n">modules</span> <span class="k">in</span> <span class="n">the</span> <span class="k">source</span> <span class="k">for</span> <span class="k">usage</span> <span class="n">documentation</span>
 
-   gridxc_nfft          ! Get allowed sizes for FFTs (for VDW functionals)
-   setMeshDistr         ! Set a distribution of mesh points over processors
-   myMeshBox            ! Get my processor mesh box
+   <span class="n">gridxc_nfft</span>          <span class="o">!</span> <span class="k">Get</span> <span class="n">allowed</span> <span class="n">sizes</span> <span class="k">for</span> <span class="n">FFTs</span> <span class="p">(</span><span class="k">for</span> <span class="n">VDW</span> <span class="n">functionals</span><span class="p">)</span>
+   <span class="n">setMeshDistr</span>         <span class="o">!</span> <span class="k">Set</span> <span class="n">a</span> <span class="n">distribution</span> <span class="k">of</span> <span class="n">mesh</span> <span class="n">points</span> <span class="n">over</span> <span class="n">processors</span>
+   <span class="n">myMeshBox</span>            <span class="o">!</span> <span class="k">Get</span> <span class="n">my</span> <span class="n">processor</span> <span class="n">mesh</span> <span class="n">box</span>
 
-   setDebugOutputUnit   ! Initialize debug report
-   closeDebugOutputFile ! Print debug report
-</pre></div>
+   <span class="n">setDebugOutputUnit</span>   <span class="o">!</span> <span class="k">Initialize</span> <span class="n">debug</span> <span class="n">report</span>
+   <span class="n">closeDebugOutputFile</span> <span class="o">!</span> <span class="n">Print</span> <span class="n">debug</span> <span class="n">report</span>
+</code></pre></div>
       <br>
     
   
@@ -239,7 +239,7 @@
     
     <li>m_ggaxc</li>
     
-    <li>gridxc_fft_gpfa</li>
+    <li><a href='../module/gridxc_fft_gpfa.html'>gridxc_fft_gpfa</a></li>
     
     <li>mesh3d</li>
     
@@ -316,7 +316,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

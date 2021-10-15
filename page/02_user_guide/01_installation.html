@@ -130,32 +130,32 @@ MPI-extended Fortran and C compilers are given by MPIFC and MPICC,
 respectively, the following sequences of commands will install appropriate flavors of libGridXC in the
 <code>${GRIDXC_ROOT}</code> installation directory:</p>
 <h3 id="serial-version">Serial version</h3>
-<div class="codehilite"><pre><span></span>    ./configure --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+<div class="codehilite"><pre><span></span><code>    ./configure --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
     make
     make check
     make install
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="mpi-version">MPI version</h3>
-<div class="codehilite"><pre><span></span>    FC=<span class="nv">$MPIFC</span> CC=<span class="nv">$MPICC</span> ../configure --with-mpi=<span class="cp">${</span><span class="n">MPI_ROOT</span><span class="cp">}</span> --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+<div class="codehilite"><pre><span></span><code>    FC=<span class="nv">$MPIFC</span> CC=<span class="nv">$MPICC</span> ../configure --with-mpi=<span class="cp">${</span><span class="n">MPI_ROOT</span><span class="cp">}</span> --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
     make
     make check
     make install
-</pre></div>
+</code></pre></div>
 
 
 <h3 id="single-precision-version">Single-precision version</h3>
 <p>This affects only the arrays handled by <code>gridxc_cellxc</code>. The spherical-grid interface always works in double-precision.</p>
-<div class="codehilite"><pre><span></span>    ../configure  --enable-single-precision --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+<div class="codehilite"><pre><span></span><code>    ../configure  --enable-single-precision --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
     make
     make check
     make install
-</pre></div>
+</code></pre></div>
 
 
 <p>The above buildings will result in installation directories with the following structure:</p>
-<div class="codehilite"><pre><span></span><span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>:
+<div class="codehilite"><pre><span></span><code><span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>:
 ├── include
 │   └── gridxc
 │       ├── debugxc.mod
@@ -165,7 +165,7 @@ respectively, the following sequences of commands will install appropriate flavo
         ...
 │   ├── libgridxc.a
         ...
-</pre></div>
+</code></pre></div>
 
 
 <p>so that to have different versions installed at the same time one
@@ -176,7 +176,7 @@ alternative, more compact way, is presented in the next section.</p>
 <p>Using the <code>--enable-multiconfig</code> configure option, multiple
 flavors of the library with different options can coexist in the
 same root installation directory. For example,</p>
-<div class="codehilite"><pre><span></span>    ./configure --enable-multiconfig --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
+<div class="codehilite"><pre><span></span><code>    ./configure --enable-multiconfig --with-libxc=<span class="cp">${</span><span class="n">LIBXC_ROOT</span><span class="cp">}</span>  --prefix=<span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>
     make
     make check
     make install
@@ -185,11 +185,11 @@ same root installation directory. For example,</p>
     make
     make check
     make install
-</pre></div>
+</code></pre></div>
 
 
 <p>will result in</p>
-<div class="codehilite"><pre><span></span><span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>:
+<div class="codehilite"><pre><span></span><code><span class="cp">${</span><span class="n">GRIDXC_ROOT</span><span class="cp">}</span>:
 ├── include
 │   ├── gridxc_dp
 │   │   ├── gridxc.mod
@@ -201,26 +201,26 @@ same root installation directory. For example,</p>
         ...
 │   ├── libgridxc_dp.a
 │   ├── libgridxc_dp_mpi.a
-</pre></div>
+</code></pre></div>
 
 
 <p>This idea can be extended to the single/double precision options. The
 script <code>multiconfig-build.sh</code> in the top level of the distribution can
 be used to configure, compile, and install all available flavors of the library:</p>
-<div class="codehilite"><pre><span></span>gridxc_dp
-gridxc_dp_mpi
-gridxc_sp
-gridxc_sp_mpi
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">gridxc_dp</span>
+<span class="err">gridxc_dp_mpi</span>
+<span class="err">gridxc_sp</span>
+<span class="err">gridxc_sp_mpi</span>
+</code></pre></div>
 
 
 <p>This is recommended procedure for production versions of the library. The script should be invoked with
 the appropriate variables in the environment. For example: (note the escaped newlines):</p>
-<div class="codehilite"><pre><span></span>FC=gfortran  MPIFC=mpif90  MPICC=mpicc \
-LIBXC_ROOT=/path/to/libxc/installation \
-MPI_ROOT=/path/to/mpi/installation \
-GRIDXC_PREFIX=/path/to/desired/installation  sh multiconfig-build.sh
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">FC=gfortran  MPIFC=mpif90  MPICC=mpicc \</span>
+<span class="err">LIBXC_ROOT=/path/to/libxc/installation \</span>
+<span class="err">MPI_ROOT=/path/to/mpi/installation \</span>
+<span class="err">GRIDXC_PREFIX=/path/to/desired/installation  sh multiconfig-build.sh</span>
+</code></pre></div>
 
 
 <h2 id="compiling-user-programs">Compiling user programs</h2>
@@ -278,7 +278,7 @@ of the <code>GRIDXC_PREFIX</code> installation option above.</p>
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

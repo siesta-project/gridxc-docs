@@ -133,7 +133,7 @@
 </ul>
 <p>The library is written in modern Fortran. </p>
 <p>A typical serial program call is:</p>
-<div class="codehilite"><pre><span></span>  <span class="k">use </span><span class="nb">precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">dp</span>
+<div class="codehilite"><pre><span></span><code>  <span class="k">use </span><span class="nb">precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">dp</span>
 
   <span class="k">use </span><span class="n">gridxc</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">grid_p</span>
   <span class="k">use </span><span class="n">gridxc</span><span class="p">,</span>     <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_setXC_family_authors</span><span class="p">,</span> <span class="n">gridxc_cellxc</span>
@@ -150,11 +150,11 @@
   <span class="k">call </span><span class="n">gridxc_setXC_family_authors</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;GGA&#39;</span><span class="p">,</span> <span class="s1">&#39;PBE&#39;</span> <span class="p">)</span>
   <span class="k">call </span><span class="n">gridxc_cellXC</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">nMesh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="n">nMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span><span class="n">nMesh</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span><span class="n">nMesh</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="p">&amp;</span>
                <span class="n">nSpin</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Dc</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="n">Vxc</span> <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>A typical parallel program call is:</p>
-<div class="codehilite"><pre><span></span>  <span class="k">use </span><span class="nb">precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">dp</span>
+<div class="codehilite"><pre><span></span><code>  <span class="k">use </span><span class="nb">precision</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">dp</span>
 
   <span class="k">use </span><span class="n">gridxc</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">grid_p</span>
   <span class="k">use </span><span class="n">gridxc</span><span class="p">,</span>     <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_setXC_family_authors</span><span class="p">,</span> <span class="n">gridxc_cellxc</span>
@@ -185,11 +185,11 @@
                                <span class="n">myBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">&amp;</span>
                                <span class="n">myBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="p">&amp;</span>
                <span class="n">nSpin</span><span class="p">,</span> <span class="n">dens</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Dc</span><span class="p">,</span> <span class="n">stress</span><span class="p">,</span> <span class="n">Vxc</span> <span class="p">)</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>For the radial grid interface, a typical call sequence is:</p>
-<div class="codehilite"><pre><span></span>   <span class="k">use</span> <span class="p">...</span>
+<div class="codehilite"><pre><span></span><code>   <span class="k">use</span> <span class="p">...</span>
    <span class="kt">integer</span>  <span class="kd">::</span> <span class="n">nr</span><span class="p">,</span> <span class="n">nSpin</span>
    <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Dc</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Ec</span><span class="p">,</span> <span class="n">Ex</span>
    <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="k">allocatable</span> <span class="kd">::</span> <span class="n">dens</span><span class="p">(:,:),</span> <span class="n">rMesh</span><span class="p">(:,:),</span> <span class="n">Vxc</span><span class="p">(:,:)</span>
@@ -200,7 +200,7 @@
    <span class="c">! (Find rMesh(:) and dens(:,:) at all mesh points)</span>
    <span class="k">call </span><span class="n">gridxc_setXC_family_authors</span><span class="p">(</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;GGA&#39;</span><span class="p">,</span> <span class="s1">&#39;PBE&#39;</span> <span class="p">)</span>
    <span class="k">call </span><span class="n">gridxc_atomXC</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nr</span><span class="p">,</span> <span class="n">nr</span><span class="p">,</span> <span class="n">rmesh</span><span class="p">,</span> <span class="n">nSpin</span><span class="p">,</span> <span class="n">Dens</span><span class="p">,</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Ec</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Dc</span><span class="p">,</span> <span class="n">Vxc</span> <span class="p">)</span>
-</pre></div>
+</code></pre></div>
     </div>
     
     <div class="col-md-3 col-md-pull-9">
@@ -251,7 +251,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

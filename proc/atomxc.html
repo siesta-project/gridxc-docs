@@ -113,7 +113,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="25.2% of total for procedures.">295 statements</a>
+    title="22.6% of total for procedures.">295 statements</a>
      </li> 
      
      
@@ -255,35 +255,35 @@ public subroutine atomXC(irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc
     
     <p>Finds total exchange-correlation energy and potential for a
  spherical electron density distribution.</p>
-<div class="codehilite"><pre><span></span> This version implements the Local (spin) Density Approximation and
- the Generalized-Gradient-Aproximation with the &#39;explicit mesh 
- functional&#39; approach of White &amp; Bird, PRB 50, 4954 (1994).
- Gradients are &#39;defined&#39; by numerical derivatives, using 2*nn+1 mesh
-   points, where nn is a parameter defined below
- Ref: L.C.Balbas et al, PRB 64, 165110 (2001)
- Written by J.M.Soler using algorithms developed by 
-   L.C.Balbas, J.L.Martins and J.M.Soler, Dec.1996
- Van der Waals functional added by J.M.Soler, Jul.2008, as explained in
-   G.Roman-Perez and J.M.Soler, PRL 103, 096102 (2009)
- ************************* INPUT ***********************************
- INTEGER irel         : Relativistic exchange? (0=&gt;no, 1=&gt;yes)
- INTEGER nr           : Number of radial mesh points
- INTEGER maxr         : Physical first dimension of Dens and Vxc
- REAL*8  rmesh(nr)    : Radial mesh points. Must be nr.le.maxr
- INTEGER nSpin        : nSpin=1 =&gt; unpolarized; nSpin=2 =&gt; polarized
- REAL*8  Dens(maxr,nSpin) : Total (nSpin=1) or spin (nSpin=2) electron
-                            density at mesh points
- ************************* OUTPUT **********************************
- REAL*8  Ex              : Total exchange energy
- REAL*8  Ec              : Total correlation energy
- REAL*8  Dx              : IntegralOf( rho * (eps_x - v_x) )
- REAL*8  Dc              : IntegralOf( rho * (eps_c - v_c) )
- REAL*8  Vxc(maxr,nSpin) : (Spin) exch-corr potential
- ************************ UNITS ************************************
- Distances in atomic units (Bohr).
- Densities in atomic units (electrons/Bohr**3)
- Energy unit depending of parameter Eunit below (currently Rydberg)
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err"> This version implements the Local (spin) Density Approximation and</span>
+<span class="err"> the Generalized-Gradient-Aproximation with the &#39;explicit mesh </span>
+<span class="err"> functional&#39; approach of White &amp; Bird, PRB 50, 4954 (1994).</span>
+<span class="err"> Gradients are &#39;defined&#39; by numerical derivatives, using 2*nn+1 mesh</span>
+<span class="err">   points, where nn is a parameter defined below</span>
+<span class="err"> Ref: L.C.Balbas et al, PRB 64, 165110 (2001)</span>
+<span class="err"> Written by J.M.Soler using algorithms developed by </span>
+<span class="err">   L.C.Balbas, J.L.Martins and J.M.Soler, Dec.1996</span>
+<span class="err"> Van der Waals functional added by J.M.Soler, Jul.2008, as explained in</span>
+<span class="err">   G.Roman-Perez and J.M.Soler, PRL 103, 096102 (2009)</span>
+<span class="err"> ************************* INPUT ***********************************</span>
+<span class="err"> INTEGER irel         : Relativistic exchange? (0=&gt;no, 1=&gt;yes)</span>
+<span class="err"> INTEGER nr           : Number of radial mesh points</span>
+<span class="err"> INTEGER maxr         : Physical first dimension of Dens and Vxc</span>
+<span class="err"> REAL*8  rmesh(nr)    : Radial mesh points. Must be nr.le.maxr</span>
+<span class="err"> INTEGER nSpin        : nSpin=1 =&gt; unpolarized; nSpin=2 =&gt; polarized</span>
+<span class="err"> REAL*8  Dens(maxr,nSpin) : Total (nSpin=1) or spin (nSpin=2) electron</span>
+<span class="err">                            density at mesh points</span>
+<span class="err"> ************************* OUTPUT **********************************</span>
+<span class="err"> REAL*8  Ex              : Total exchange energy</span>
+<span class="err"> REAL*8  Ec              : Total correlation energy</span>
+<span class="err"> REAL*8  Dx              : IntegralOf( rho * (eps_x - v_x) )</span>
+<span class="err"> REAL*8  Dc              : IntegralOf( rho * (eps_c - v_c) )</span>
+<span class="err"> REAL*8  Vxc(maxr,nSpin) : (Spin) exch-corr potential</span>
+<span class="err"> ************************ UNITS ************************************</span>
+<span class="err"> Distances in atomic units (Bohr).</span>
+<span class="err"> Densities in atomic units (electrons/Bohr**3)</span>
+<span class="err"> Energy unit depending of parameter Eunit below (currently Rydberg)</span>
+</code></pre></div>
     
 
     <h3>Arguments</h3>
@@ -532,7 +532,7 @@ public subroutine atomXC(irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

@@ -129,47 +129,47 @@ the MGGA functionals in LibXC is being implemented.</p>
 <h2 id="built-in-functionals">Built-in functionals</h2>
 <p>The built-in functionals are classified by <code>family</code> (LDA (or LSD), GGA, VDW) and <code>authors</code>:</p>
 <h3 id="ldalsd">LDA/LSD</h3>
-<div class="codehilite"><pre><span></span>     &#39;CA&#39; or &#39;PZ&#39; =&gt; LSD Perdew &amp; Zunger, PRB 23, 5075 (1981)
-           &#39;PW92&#39; =&gt; LSD Perdew &amp; Wang, PRB, 45, 13244 (1992)
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">     &#39;CA&#39; or &#39;PZ&#39; =&gt; LSD Perdew &amp; Zunger, PRB 23, 5075 (1981)</span>
+<span class="err">           &#39;PW92&#39; =&gt; LSD Perdew &amp; Wang, PRB, 45, 13244 (1992)</span>
+</code></pre></div>
 
 
 <h3 id="gga">GGA</h3>
-<div class="codehilite"><pre><span></span>           &#39;PW91&#39; =&gt; GGA Perdew &amp; Wang, JCP, 100, 1290 (1994) 
-            &#39;PBE&#39; =&gt; GGA Perdew, Burke &amp; Ernzerhof, PRL 77, 3865 (1996)
-           &#39;RPBE&#39; =&gt; GGA Hammer, Hansen &amp; Norskov, PRB 59, 7413 (1999)
-         &#39;revPBE&#39; =&gt; GGA Zhang &amp; Yang, PRL 80,890(1998)
-            &#39;LYP&#39; =&gt; GGA Becke-Lee-Yang-Parr (see subroutine blypxc)
-             &#39;WC&#39; =&gt; GGA Wu-Cohen (see subroutine wcxc)
-         &#39;PBESOL&#39; =&gt; GGA Perdew et al, PRL, 100, 136406 (2008)
-           &#39;AM05&#39; =&gt; GGA Mattsson &amp; Armiento, PRB, 79, 155101 (2009)
-      &#39;PBEJsJrLO&#39; =&gt; GGA Reparametrizations of the PBE functional by
-     &#39;PBEJsJrHEG&#39; =&gt; GGA   L.S.Pedroza et al, PRB 79, 201106 (2009) and
-      &#39;PBEGcGxLO&#39; =&gt; GGA   M.M.Odashima et al, JCTC 5, 798 (2009)
-     &#39;PBEGcGxHEG&#39; =&gt; GGA using 4 different combinations of criteria
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">           &#39;PW91&#39; =&gt; GGA Perdew &amp; Wang, JCP, 100, 1290 (1994) </span>
+<span class="err">            &#39;PBE&#39; =&gt; GGA Perdew, Burke &amp; Ernzerhof, PRL 77, 3865 (1996)</span>
+<span class="err">           &#39;RPBE&#39; =&gt; GGA Hammer, Hansen &amp; Norskov, PRB 59, 7413 (1999)</span>
+<span class="err">         &#39;revPBE&#39; =&gt; GGA Zhang &amp; Yang, PRL 80,890(1998)</span>
+<span class="err">            &#39;LYP&#39; =&gt; GGA Becke-Lee-Yang-Parr (see subroutine blypxc)</span>
+<span class="err">             &#39;WC&#39; =&gt; GGA Wu-Cohen (see subroutine wcxc)</span>
+<span class="err">         &#39;PBESOL&#39; =&gt; GGA Perdew et al, PRL, 100, 136406 (2008)</span>
+<span class="err">           &#39;AM05&#39; =&gt; GGA Mattsson &amp; Armiento, PRB, 79, 155101 (2009)</span>
+<span class="err">      &#39;PBEJsJrLO&#39; =&gt; GGA Reparametrizations of the PBE functional by</span>
+<span class="err">     &#39;PBEJsJrHEG&#39; =&gt; GGA   L.S.Pedroza et al, PRB 79, 201106 (2009) and</span>
+<span class="err">      &#39;PBEGcGxLO&#39; =&gt; GGA   M.M.Odashima et al, JCTC 5, 798 (2009)</span>
+<span class="err">     &#39;PBEGcGxHEG&#39; =&gt; GGA using 4 different combinations of criteria</span>
+</code></pre></div>
 
 
 <h3 id="vdw">VDW</h3>
-<div class="codehilite"><pre><span></span>          &#39;DRSLL&#39; =&gt; VDW Dion et al, PRL 92, 246401 (2004)
-          &#39;LMKLL&#39; =&gt; VDW K.Lee et al, PRB 82, 081101 (2010)
-            &#39;KBM&#39; =&gt; VDW optB88-vdW of J.Klimes et al, JPCM 22, 022201 (2010)
-            &#39;C09&#39; =&gt; VDW V.R. Cooper, PRB 81, 161104 (2010)
-             &#39;BH&#39; =&gt; VDW K. Berland and Per Hyldgaard, PRB 89, 035412 (2014)
-             &#39;VV&#39; =&gt; VDW Vydrov-VanVoorhis, JCP 133, 244103 (2010)
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">          &#39;DRSLL&#39; =&gt; VDW Dion et al, PRL 92, 246401 (2004)</span>
+<span class="err">          &#39;LMKLL&#39; =&gt; VDW K.Lee et al, PRB 82, 081101 (2010)</span>
+<span class="err">            &#39;KBM&#39; =&gt; VDW optB88-vdW of J.Klimes et al, JPCM 22, 022201 (2010)</span>
+<span class="err">            &#39;C09&#39; =&gt; VDW V.R. Cooper, PRB 81, 161104 (2010)</span>
+<span class="err">             &#39;BH&#39; =&gt; VDW K. Berland and Per Hyldgaard, PRB 89, 035412 (2014)</span>
+<span class="err">             &#39;VV&#39; =&gt; VDW Vydrov-VanVoorhis, JCP 133, 244103 (2010)</span>
+</code></pre></div>
 
 
 <p>To access these functionals, one can simply call the <a href="../../../proc/setxc_family_authors.html">setXC_family_authors</a> routine:</p>
-<div class="codehilite"><pre><span></span>  call setxc_family_authors(&#39;GGA&#39;, &#39;PBE&#39;)
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">  call setxc_family_authors(&#39;GGA&#39;, &#39;PBE&#39;)</span>
+</code></pre></div>
 
 
 <p>The library offers also an expanded version of this routine that is
 able to describe <em>cocktail mixings</em> of functionals, each with its
 appropriate weight. For example,</p>
-<div class="codehilite"><pre><span></span>   call setXC( 2, (/&#39;GGA&#39;,&#39;GGA&#39;/), (/&#39;PBE&#39;,&#39;WC&#39;/), (/1.0_dp, 0.0_dp/), (/0.75_dp,0.25_dp/) )
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">   call setXC( 2, (/&#39;GGA&#39;,&#39;GGA&#39;/), (/&#39;PBE&#39;,&#39;WC&#39;/), (/1.0_dp, 0.0_dp/), (/0.75_dp,0.25_dp/) )</span>
+</code></pre></div>
 
 
 <p>will use a cocktail of PBE and WC in which the exchange part is 100% PBE, and the correlation part is 75% PBE and 25% WC.</p>
@@ -181,14 +181,14 @@ of PBE, respectively XC_GGA_X_PBE (id 101) and XC_GGA_C_PBE (id
 130). The <em>id</em> or functional number, while not human friendly, is the
 recommended way of identification for full compatibility.</p>
 <p>To tell libGridXC that a PBE functional from LibXC is desired, we can use the call:</p>
-<div class="codehilite"><pre><span></span>  call setXC_libxc_ids ( 2, (/ 101, 130 /) )
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">  call setXC_libxc_ids ( 2, (/ 101, 130 /) )</span>
+</code></pre></div>
 
 
 <p>Note that this combination of exchange and correlation parts can be seen as a special kind of <em>cocktail mixing</em>. Hence
 the same result could be obtained by the call:</p>
-<div class="codehilite"><pre><span></span>   call setXC( 2, (/&#39;GGA&#39;,&#39;GGA&#39;/), (/&#39;LIBXC-101&#39;,&#39;LIBXC-130&#39;/), (/1.0_dp, 0.0_dp/), (/0.0_dp,1.0_dp/) )
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">   call setXC( 2, (/&#39;GGA&#39;,&#39;GGA&#39;/), (/&#39;LIBXC-101&#39;,&#39;LIBXC-130&#39;/), (/1.0_dp, 0.0_dp/), (/0.0_dp,1.0_dp/) )</span>
+</code></pre></div>
 
 
 <p>where the "author" field is a special string of the form
@@ -201,19 +201,19 @@ time of compilation of libXC, noting that the initial <code>XC_</code> has to be
 removed). If the LibXC id is not known, it can be set to 0 and leave
 the specification to the symbolic part. For example, the following
 forms are equivalent:</p>
-<div class="codehilite"><pre><span></span>LIBXC-101
-LIBXC-0101
-LIBXC-0-GGA_X_PBE
-LIBXC-101-GGA_X_PBE
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">LIBXC-101</span>
+<span class="err">LIBXC-0101</span>
+<span class="err">LIBXC-0-GGA_X_PBE</span>
+<span class="err">LIBXC-101-GGA_X_PBE</span>
+</code></pre></div>
 
 
 <p>This form is more cumbersome, but it can be generalized if desired to extra
 mixings (even with non-libxc functionals).</p>
 <p>A handful of LibXC functionals are "exchange-correlation". For them, the specification can simply be, for example
 (XC_LDA_XC_TETER93 functional, id=20):</p>
-<div class="codehilite"><pre><span></span>  call setXC_libxc_ids ( 1, (/ 20 /) )
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err">  call setXC_libxc_ids ( 1, (/ 20 /) )</span>
+</code></pre></div>
     </div>
     
     <div class="col-md-3 col-md-pull-9">
@@ -264,7 +264,7 @@ mixings (even with non-libxc functionals).</p>
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

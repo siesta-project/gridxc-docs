@@ -113,7 +113,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title="65.3% of total for procedures.">765 statements</a>
+    title="58.5% of total for procedures.">765 statements</a>
      </li> 
      
      
@@ -280,99 +280,99 @@ public subroutine cellXC(irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, nSpin,
 
     
     <p>Finds total exchange-correlation energy and potential in a periodic cell.</p>
-<div class="codehilite"><pre><span></span> This version implements the Local (spin) Density Approximation and
-   the Generalized-Gradient-Aproximation with the &#39;explicit mesh 
-   functional&#39; approach of White &amp; Bird, PRB 50, 4954 (1994).
- Gradients are &#39;defined&#39; by numerical derivatives, using 2*nn+1 mesh
-   points, where nn is a parameter defined below
- Ref: L.C.Balbas et al, PRB 64, 165110 (2001)
- Written by J.M.Soler using algorithms developed by 
-   L.C.Balbas, J.L.Martins and J.M.Soler, Dec.1996 - Aug.1997
- Parallel version written by J.Gale. June 1999.
- Argument dVxcdD added by J.Junquera. November 2000.
- Adapted for multiple functionals in the same run by J.Gale 2005
- Van der Waals functional added by J.M.Soler, Jan.2008, as explained in
-   G.Roman-Perez and J.M.Soler, PRL 103, 096102 (2009)
- ************************* INPUT ***********************************
- integer  irel        : Relativistic exchange? (0=&gt;no, 1=&gt;yes)
- real(dp) cell(3,3)   : Unit cell vectors cell(ixyz,ivector)
- integer  nMesh(3)    : Total mesh divisions of each cell vector
- integer  lb1,lb2,lb3 : Lower bounds of arrays dens, Vxc, dVxcdD
- integer  ub1,ub2,ub3 : Upper bounds of arrays dens, Vxc, dVxcdD
- integer  nSpin       : nSpin=1 =&gt; unpolarized; nSpin=2 =&gt; polarized;
-                        nSpin&gt;2 =&gt; non-collinear polarization
- real(grid_p) dens(lb1:ub1,lb2:ub2,lb3:ub3,nSpin) : Total (nSpin=1) or 
-                        spin (nSpin=2) electron density at mesh points
-                        For non-collinear polarization, the density
-                        matrix is given by: dens(1)=D11, dens(2)=D22,
-                        dens(3)=Real(D12), dens(4)=Im(D12)
- ************************* OUTPUT **********************************
- real(dp) Ex             : Total exchange energy per unit cell
- real(dp) Ec             : Total correlation energy per unit cell
- real(dp) Dx             : IntegralOf( rho * (eps_x - v_x) ) in unit cell
- real(dp) Dc             : IntegralOf( rho * (eps_c - v_c) ) in unit cell
- real(dp) stress(3,3)    : xc contribution to the stress tensor, in unit
-                           cell, assuming constant density (not charge),
-                           i.e. r-&gt;r&#39; =&gt; rho&#39;(r&#39;) = rho(r)
-                           For plane-wave and grid (finite diff) basis
-                           sets, density rescaling gives an extra term
-                           (not included) (Dx+Dc-Ex-Ec)/cell_volume for
-                           the diagonal elements of stress. For other
-                           basis sets, the extra term is, in general:
-                           IntegralOf(v_xc * d_rho/d_strain) / cell_vol
- real(grid_p) Vxc(lb1:ub1,lb2:ub2,lb3:ub3,nSpin) : (Spin) xc potential
- ************************* OPTIONAL INPUT *************************
- logical keep_input_distribution :  Avoid internal load-balancer and lock
-                                    the passed parallel distribution
-                                    (for LDA calculations only)
- ************************* OPTIONAL OUTPUT *************************
- real(grid_p) dVxcdD(lb1:ub1,lb2:ub2,lb3:ub3,nSpin*nSpin) : Derivatives
-                           of xc potential respect to charge density
-                           Available only for LDA (libxc + built-in CA/PZ)
-                           and collinear-spin
- ************************ UNITS ************************************
- Distances in atomic units (Bohr).
- Densities in atomic units (electrons/Bohr**3)
- Energy unit depending of parameter EUnit below (currently Rydberg)
- Stress in EUnit/Bohr**3
-</pre></div>
+<div class="codehilite"><pre><span></span><code><span class="err"> This version implements the Local (spin) Density Approximation and</span>
+<span class="err">   the Generalized-Gradient-Aproximation with the &#39;explicit mesh </span>
+<span class="err">   functional&#39; approach of White &amp; Bird, PRB 50, 4954 (1994).</span>
+<span class="err"> Gradients are &#39;defined&#39; by numerical derivatives, using 2*nn+1 mesh</span>
+<span class="err">   points, where nn is a parameter defined below</span>
+<span class="err"> Ref: L.C.Balbas et al, PRB 64, 165110 (2001)</span>
+<span class="err"> Written by J.M.Soler using algorithms developed by </span>
+<span class="err">   L.C.Balbas, J.L.Martins and J.M.Soler, Dec.1996 - Aug.1997</span>
+<span class="err"> Parallel version written by J.Gale. June 1999.</span>
+<span class="err"> Argument dVxcdD added by J.Junquera. November 2000.</span>
+<span class="err"> Adapted for multiple functionals in the same run by J.Gale 2005</span>
+<span class="err"> Van der Waals functional added by J.M.Soler, Jan.2008, as explained in</span>
+<span class="err">   G.Roman-Perez and J.M.Soler, PRL 103, 096102 (2009)</span>
+<span class="err"> ************************* INPUT ***********************************</span>
+<span class="err"> integer  irel        : Relativistic exchange? (0=&gt;no, 1=&gt;yes)</span>
+<span class="err"> real(dp) cell(3,3)   : Unit cell vectors cell(ixyz,ivector)</span>
+<span class="err"> integer  nMesh(3)    : Total mesh divisions of each cell vector</span>
+<span class="err"> integer  lb1,lb2,lb3 : Lower bounds of arrays dens, Vxc, dVxcdD</span>
+<span class="err"> integer  ub1,ub2,ub3 : Upper bounds of arrays dens, Vxc, dVxcdD</span>
+<span class="err"> integer  nSpin       : nSpin=1 =&gt; unpolarized; nSpin=2 =&gt; polarized;</span>
+<span class="err">                        nSpin&gt;2 =&gt; non-collinear polarization</span>
+<span class="err"> real(grid_p) dens(lb1:ub1,lb2:ub2,lb3:ub3,nSpin) : Total (nSpin=1) or </span>
+<span class="err">                        spin (nSpin=2) electron density at mesh points</span>
+<span class="err">                        For non-collinear polarization, the density</span>
+<span class="err">                        matrix is given by: dens(1)=D11, dens(2)=D22,</span>
+<span class="err">                        dens(3)=Real(D12), dens(4)=Im(D12)</span>
+<span class="err"> ************************* OUTPUT **********************************</span>
+<span class="err"> real(dp) Ex             : Total exchange energy per unit cell</span>
+<span class="err"> real(dp) Ec             : Total correlation energy per unit cell</span>
+<span class="err"> real(dp) Dx             : IntegralOf( rho * (eps_x - v_x) ) in unit cell</span>
+<span class="err"> real(dp) Dc             : IntegralOf( rho * (eps_c - v_c) ) in unit cell</span>
+<span class="err"> real(dp) stress(3,3)    : xc contribution to the stress tensor, in unit</span>
+<span class="err">                           cell, assuming constant density (not charge),</span>
+<span class="err">                           i.e. r-&gt;r&#39; =&gt; rho&#39;(r&#39;) = rho(r)</span>
+<span class="err">                           For plane-wave and grid (finite diff) basis</span>
+<span class="err">                           sets, density rescaling gives an extra term</span>
+<span class="err">                           (not included) (Dx+Dc-Ex-Ec)/cell_volume for</span>
+<span class="err">                           the diagonal elements of stress. For other</span>
+<span class="err">                           basis sets, the extra term is, in general:</span>
+<span class="err">                           IntegralOf(v_xc * d_rho/d_strain) / cell_vol</span>
+<span class="err"> real(grid_p) Vxc(lb1:ub1,lb2:ub2,lb3:ub3,nSpin) : (Spin) xc potential</span>
+<span class="err"> ************************* OPTIONAL INPUT *************************</span>
+<span class="err"> logical keep_input_distribution :  Avoid internal load-balancer and lock</span>
+<span class="err">                                    the passed parallel distribution</span>
+<span class="err">                                    (for LDA calculations only)</span>
+<span class="err"> ************************* OPTIONAL OUTPUT *************************</span>
+<span class="err"> real(grid_p) dVxcdD(lb1:ub1,lb2:ub2,lb3:ub3,nSpin*nSpin) : Derivatives</span>
+<span class="err">                           of xc potential respect to charge density</span>
+<span class="err">                           Available only for LDA (libxc + built-in CA/PZ)</span>
+<span class="err">                           and collinear-spin</span>
+<span class="err"> ************************ UNITS ************************************</span>
+<span class="err"> Distances in atomic units (Bohr).</span>
+<span class="err"> Densities in atomic units (electrons/Bohr**3)</span>
+<span class="err"> Energy unit depending of parameter EUnit below (currently Rydberg)</span>
+<span class="err"> Stress in EUnit/Bohr**3</span>
+</code></pre></div>
 
 
 <p>IMPORTANT NOTE:</p>
-<div class="codehilite"><pre><span></span> Arrays dens, Vxc, and dVxcdD may be alternatively 
- allocated and initialized with indexes beginning in 0 or 1, 
- or even use a single-index array, e.g.:
-   real(grid_p),allocatable :: dens(:,:), Vxc(:,:)
-   myMesh(1:3) = myBox(2,:) - myBox(1,:) + 1
-   myPoints = myMesh(1)*myMesh(2)*myMesh(3)
-   allocate( dens(myPoints,nSpin), Vxc(myPoints,nSpin) )
-   iPoint = 0
-   do i3 = myBox(1,3),myBox(2,3)
-   do i2 = myBox(1,2),myBox(2,2)
-   do i1 = myBox(1,1),myBox(2,1)
-     iPoint = iPoint + 1
-     do iSpin = 1,nSpin
-       dens(iPoint,iSpin) = (spin)density at point (i1,i2,i3)
-     end do
-   end do
-   end do
-   end do
- but the call to cellXC must still be as given above, i.e. the
- arguments lb1,ub1,... must be the lower and upper bounds of the
- mesh box stored by each processor (not the allocated array bounds).
- However, the arrays size MUST be (ub1-lb1+1)*(ub2-lb2+1)*(ub3-lb3+1)
- The processor mesh boxes must not overlap, and they must cover the 
- entire unit cell mesh. This is NOT checked inside cellXC.
+<div class="codehilite"><pre><span></span><code> <span class="n">Arrays</span> <span class="n">dens</span><span class="p">,</span> <span class="n">Vxc</span><span class="p">,</span> <span class="k">and</span> <span class="n">dVxcdD</span> <span class="n">may</span> <span class="n">be</span> <span class="n">alternatively</span> 
+ <span class="n">allocated</span> <span class="k">and</span> <span class="n">initialized</span> <span class="k">with</span> <span class="n">indexes</span> <span class="n">beginning</span> <span class="k">in</span> <span class="mi">0</span> <span class="k">or</span> <span class="mi">1</span><span class="p">,</span> 
+ <span class="k">or</span> <span class="n">even</span> <span class="n">use</span> <span class="n">a</span> <span class="n">single</span><span class="o">-</span><span class="k">index</span> <span class="nb">array</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="k">g</span><span class="p">.:</span>
+   <span class="nb">real</span><span class="p">(</span><span class="n">grid_p</span><span class="p">),</span><span class="n">allocatable</span> <span class="p">::</span> <span class="n">dens</span><span class="p">(:,:),</span> <span class="n">Vxc</span><span class="p">(:,:)</span>
+   <span class="n">myMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">2</span><span class="p">,:)</span> <span class="o">-</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,:)</span> <span class="o">+</span> <span class="mi">1</span>
+   <span class="n">myPoints</span> <span class="o">=</span> <span class="n">myMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">myMesh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">myMesh</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+   <span class="k">allocate</span><span class="p">(</span> <span class="n">dens</span><span class="p">(</span><span class="n">myPoints</span><span class="p">,</span><span class="n">nSpin</span><span class="p">),</span> <span class="n">Vxc</span><span class="p">(</span><span class="n">myPoints</span><span class="p">,</span><span class="n">nSpin</span><span class="p">)</span> <span class="p">)</span>
+   <span class="n">iPoint</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="k">do</span> <span class="n">i3</span> <span class="o">=</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">myBox</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+   <span class="k">do</span> <span class="n">i2</span> <span class="o">=</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="n">myBox</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+   <span class="k">do</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">myBox</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="n">myBox</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+     <span class="n">iPoint</span> <span class="o">=</span> <span class="n">iPoint</span> <span class="o">+</span> <span class="mi">1</span>
+     <span class="k">do</span> <span class="n">iSpin</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">nSpin</span>
+       <span class="n">dens</span><span class="p">(</span><span class="n">iPoint</span><span class="p">,</span><span class="n">iSpin</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">spin</span><span class="p">)</span><span class="n">density</span> <span class="k">at</span> <span class="n">point</span> <span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">,</span><span class="n">i3</span><span class="p">)</span>
+     <span class="k">end</span> <span class="k">do</span>
+   <span class="k">end</span> <span class="k">do</span>
+   <span class="k">end</span> <span class="k">do</span>
+   <span class="k">end</span> <span class="k">do</span>
+ <span class="n">but</span> <span class="n">the</span> <span class="k">call</span> <span class="k">to</span> <span class="n">cellXC</span> <span class="n">must</span> <span class="n">still</span> <span class="n">be</span> <span class="k">as</span> <span class="n">given</span> <span class="n">above</span><span class="p">,</span> <span class="n">i</span><span class="p">.</span><span class="n">e</span><span class="p">.</span> <span class="n">the</span>
+ <span class="n">arguments</span> <span class="n">lb1</span><span class="p">,</span><span class="n">ub1</span><span class="p">,...</span> <span class="n">must</span> <span class="n">be</span> <span class="n">the</span> <span class="k">lower</span> <span class="k">and</span> <span class="k">upper</span> <span class="n">bounds</span> <span class="k">of</span> <span class="n">the</span>
+ <span class="n">mesh</span> <span class="n">box</span> <span class="n">stored</span> <span class="k">by</span> <span class="k">each</span> <span class="n">processor</span> <span class="p">(</span><span class="k">not</span> <span class="n">the</span> <span class="n">allocated</span> <span class="nb">array</span> <span class="n">bounds</span><span class="p">).</span>
+ <span class="n">However</span><span class="p">,</span> <span class="n">the</span> <span class="n">arrays</span> <span class="k">size</span> <span class="n">MUST</span> <span class="n">be</span> <span class="p">(</span><span class="n">ub1</span><span class="o">-</span><span class="n">lb1</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ub2</span><span class="o">-</span><span class="n">lb2</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">ub3</span><span class="o">-</span><span class="n">lb3</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+ <span class="n">The</span> <span class="n">processor</span> <span class="n">mesh</span> <span class="n">boxes</span> <span class="n">must</span> <span class="k">not</span> <span class="n">overlap</span><span class="p">,</span> <span class="k">and</span> <span class="n">they</span> <span class="n">must</span> <span class="n">cover</span> <span class="n">the</span> 
+ <span class="n">entire</span> <span class="n">unit</span> <span class="n">cell</span> <span class="n">mesh</span><span class="p">.</span> <span class="n">This</span> <span class="k">is</span> <span class="k">NOT</span> <span class="k">checked</span> <span class="n">inside</span> <span class="n">cellXC</span><span class="p">.</span>
 
- ********* BEHAVIOUR ***********************************************
- - Stops and prints a warning if functl is not one of LDA, GGA, or VDW
- - The output values of Ex, Ec, Dx, Dc, and stress, are integrals over
-   the whole unit cell, not over the mesh box of the local processor
- - Since the exchange and correlation part is usually a small fraction
-   of a typical electronic structure calculation, this routine has
-   been coded with emphasis on simplicity and functionality, not in
-   efficiency.
-</pre></div>
+ <span class="o">*********</span> <span class="n">BEHAVIOUR</span> <span class="o">***********************************************</span>
+ <span class="o">-</span> <span class="n">Stops</span> <span class="k">and</span> <span class="n">prints</span> <span class="n">a</span> <span class="n">warning</span> <span class="k">if</span> <span class="n">functl</span> <span class="k">is</span> <span class="k">not</span> <span class="n">one</span> <span class="k">of</span> <span class="n">LDA</span><span class="p">,</span> <span class="n">GGA</span><span class="p">,</span> <span class="k">or</span> <span class="n">VDW</span>
+ <span class="o">-</span> <span class="n">The</span> <span class="k">output</span> <span class="k">values</span> <span class="k">of</span> <span class="n">Ex</span><span class="p">,</span> <span class="n">Ec</span><span class="p">,</span> <span class="n">Dx</span><span class="p">,</span> <span class="n">Dc</span><span class="p">,</span> <span class="k">and</span> <span class="n">stress</span><span class="p">,</span> <span class="k">are</span> <span class="n">integrals</span> <span class="n">over</span>
+   <span class="n">the</span> <span class="n">whole</span> <span class="n">unit</span> <span class="n">cell</span><span class="p">,</span> <span class="k">not</span> <span class="n">over</span> <span class="n">the</span> <span class="n">mesh</span> <span class="n">box</span> <span class="k">of</span> <span class="n">the</span> <span class="k">local</span> <span class="n">processor</span>
+ <span class="o">-</span> <span class="n">Since</span> <span class="n">the</span> <span class="n">exchange</span> <span class="k">and</span> <span class="n">correlation</span> <span class="n">part</span> <span class="k">is</span> <span class="n">usually</span> <span class="n">a</span> <span class="n">small</span> <span class="n">fraction</span>
+   <span class="k">of</span> <span class="n">a</span> <span class="n">typical</span> <span class="n">electronic</span> <span class="k">structure</span> <span class="n">calculation</span><span class="p">,</span> <span class="n">this</span> <span class="k">routine</span> <span class="n">has</span>
+   <span class="n">been</span> <span class="n">coded</span> <span class="k">with</span> <span class="n">emphasis</span> <span class="k">on</span> <span class="n">simplicity</span> <span class="k">and</span> <span class="n">functionality</span><span class="p">,</span> <span class="k">not</span> <span class="k">in</span>
+   <span class="n">efficiency</span><span class="p">.</span>
+</code></pre></div>
     
 
     <h3>Arguments</h3>
@@ -743,7 +743,7 @@ public subroutine cellXC(irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, nSpin,
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">
