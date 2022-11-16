@@ -68,6 +68,8 @@
             <li><a href="../../lists/procedures.html">Procedures</a></li>
         
                
+            <li><a href="../../lists/types.html">Derived Types</a></li>
+        
         
             </ul>
             </li>
@@ -84,6 +86,8 @@
 <li class="visible-xs hidden-sm visible-lg"><a href="../../lists/procedures.html">Procedures</a></li>
 
                              
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/types.html">Derived Types</a></li>
+
 
           </ul>
         
@@ -122,9 +126,10 @@
     <div class="col-md-9 col-md-push-3" id='text'>
       <h2 id="pre-requisites">Pre-requisites</h2>
 <ul>
-<li>The <a href="https://gitlab.com/libxc/libxc/-/tags">LibXC library</a> (optional but strongly recommended).</li>
+<li>The <a href="https://gitlab.com/libxc/libxc/-/tags">LibXC library</a> (optional but strongly recommended).
+  Versions 3.X, 4.X, and 5.X of libxc are supported.</li>
 </ul>
-<h2 id="installation-of-libgridxc">Installation of libGridXC</h2>
+<h2 id="installation-of-libgridxc-with-autotools">Installation of libGridXC with autotools</h2>
 <p>Assuming that LibXC is installed in <code>${LIBXC_ROOT}</code> and that the
 MPI-extended Fortran and C compilers are given by MPIFC and MPICC,
 respectively, the following sequences of commands will install appropriate flavors of libGridXC in the
@@ -223,11 +228,48 @@ the appropriate variables in the environment. For example: (note the escaped new
 </code></pre></div>
 
 
-<h2 id="compiling-user-programs">Compiling user programs</h2>
+<h3 id="compiling-user-programs">Compiling user programs</h3>
 <p>Using the multi-config option discussed above, the appropriate modules
 will be in <code>$GRIDXC_ROOT/include/gridxc_&lt;flavor&gt;</code>, and the library
 file will be <code>$GRIDXC_ROOT/lib/libgridxc_&lt;flavor&gt;.a</code>, where <code>$GRIDXC_ROOT</code> is the value
 of the <code>GRIDXC_PREFIX</code> installation option above.</p>
+<h2 id="installation-of-libgridxc-with-cmake">Installation of libGridXC with CMake</h2>
+<p>A single version of the library will be installed, with features determined by the settings of the options (defaults shown):</p>
+<div class="codehilite"><pre><span></span><code><span class="err">option(WITH_MPI &quot;Whether libgridxc should support MPI-parallelism&quot; FALSE)</span>
+<span class="err">option(WITH_GRID_SP &quot;Whether libgridxc has a single-precision (cellxc only) interface&quot; FALSE)</span>
+</code></pre></div>
+
+
+<p>For example, a double precision MPI version can be built and installed with</p>
+<div class="codehilite"><pre><span></span><code><span class="err">cmake -S. -B_build -DWITH_MPI=ON -DCMAKE_INSTALL_PREFIX=/path/to/installation</span>
+<span class="err">cmake --build _build</span>
+<span class="err">cmake --build _build --target test  # Optional</span>
+<span class="err">cmake --install _build</span>
+</code></pre></div>
+
+
+<p>In addition, libxc support can be enabled with <code>-DWITH_LIBXC=ON</code>, and the location of libxc should be added to the search path:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">CMAKE_PREFIX_PATH=$LIBXC_ROOT cmake -S. -B_build -DWITH_MPI=ON -DWITH_LIBXC=ON -DCMAKE_INSTALL_PREFIX=/path/to/installation</span>
+</code></pre></div>
+
+
+<h3 id="compiling-user-programs-using-the-cmake-installed-version">Compiling user programs using the CMake-installed version</h3>
+<p>Just use the standard CMake idiom in your CMakeLists.txt file:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">    add_executable(your_program your_sources)</span>
+<span class="err">    find_package(libgridxc REQUIRED)</span>
+<span class="err">    target_link_libraries(your_program libgridxc::libgridxc)</span>
+</code></pre></div>
+
+
+<p>The above assumes that the installation directory for libgridxc can
+be found by CMake. This can be achieved by adding it to the CMAKE_PREFIX_PATH
+CMake or enviroment variable:</p>
+<div class="codehilite"><pre><span></span><code><span class="err">    cmake -S. -B_your_build -DCMAKE_PREFIX_PATH=$GRIDXC_ROOT .......</span>
+<span class="err">    CMAKE_PREFIX_PATH=$GRIDXC_ROOT cmake -S. -B_your_build .......</span>
+</code></pre></div>
+
+
+<p>Depending on your system and options, you might need to provide also the path to the libxc installation.</p>
     </div>
     
     <div class="col-md-3 col-md-pull-9">
@@ -278,7 +320,7 @@ of the <code>GRIDXC_PREFIX</code> installation option above.</p>
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

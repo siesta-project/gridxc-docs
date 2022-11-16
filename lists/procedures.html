@@ -70,6 +70,8 @@ All Procedures &ndash; libGridXC
             <li><a href="../lists/procedures.html">Procedures</a></li>
         
                
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
         
             </ul>
             </li>
@@ -86,6 +88,8 @@ All Procedures &ndash; libGridXC
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
 
                              
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
 
           </ul>
         
@@ -102,16 +106,28 @@ All Procedures &ndash; libGridXC
 			 <thead><tr><th>Procedure</th><th>Location</th><th>Procedure Type</th><th>Description</th></tr></thead>
 			 <tbody>
 			 
-			   <tr><td><a href='../proc/atomxc.html'>atomXC</a></td><td><a href='../module/m_atomxc.html'>m_atomXC</a></td><td>Subroutine</td><td><p>Finds total exchange-correlation energy and potential for a
+			   <tr><td><a href='../proc/atomxc.html'>atomXC</a></td><td><a href='../module/gridxc_atom.html'>gridxc_atom</a></td><td>Subroutine</td><td><p>Finds total exchange-correlation energy and potential for a
  spherical electron density distribution.</p><a href="../proc/atomxc.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			 
-			   <tr><td><a href='../proc/cellxc.html'>cellXC</a></td><td><a href='../module/m_cellxc.html'>m_cellXC</a></td><td>Subroutine</td><td><p>Finds total exchange-correlation energy and potential in a periodic cell.</p><a href="../proc/cellxc.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			   <tr><td><a href='../proc/cellxc.html'>cellXC</a></td><td><a href='../module/gridxc_cell.html'>gridxc_cell</a></td><td>Subroutine</td><td><p>Finds total exchange-correlation energy and potential in a periodic cell.</p><a href="../proc/cellxc.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
+			 
+			   <tr><td><a href='../proc/clean_spline.html'>clean_spline</a></td><td><a href='../module/gridxc_interpolation.html'>gridxc_interpolation</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/derivative.html'>derivative</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Function</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/evaluate_spline.html'>evaluate_spline</a></td><td><a href='../module/gridxc_interpolation.html'>gridxc_interpolation</a></td><td>Subroutine</td><td></td></tr>
 			 
 			   <tr><td><a href='../interface/fft_gpfa.html'>fft_gpfa</a></td><td><a href='../module/gridxc_fft_gpfa.html'>gridxc_fft_gpfa</a></td><td>Interface</td><td></td></tr>
 			 
 			   <tr><td><a href='../interface/fft_gpfa_ez.html'>fft_gpfa_ez</a></td><td><a href='../module/gridxc_fft_gpfa.html'>gridxc_fft_gpfa</a></td><td>Interface</td><td></td></tr>
 			 
-			   <tr><td><a href='../proc/getxc.html'>getXC</a></td><td><a href='../module/xcmod.html'>xcmod</a></td><td>Subroutine</td><td><p>Returns the xc functional(s) information previously set and stored
+			   <tr><td><a href='../interface/generate_spline.html'>generate_spline</a></td><td><a href='../module/gridxc_interpolation.html'>gridxc_interpolation</a></td><td>Interface</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/get_mesh.html'>get_mesh</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/get_n.html'>get_n</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Function</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/getxc.html'>getXC</a></td><td><a href='../module/gridxc_xcmod.html'>gridxc_xcmod</a></td><td>Subroutine</td><td><p>Returns the xc functional(s) information previously set and stored
   in the module variables.</p></td></tr>
 			 
 			   <tr><td><a href='../interface/gpfa.html'>gpfa</a></td><td><a href='../module/gridxc_gpfa_core_sp.html'>gridxc_gpfa_core_sp</a></td><td>Interface</td><td></td></tr>
@@ -121,22 +137,48 @@ All Procedures &ndash; libGridXC
 			   <tr><td><a href='../proc/gridxc_init.html'>gridxc_init</a></td><td><a href='../module/gridxc_config.html'>gridxc_config</a></td><td>Subroutine</td><td><p>Initialization routine. The <code>comm</code> argument is not present in the
  serial version.  </p></td></tr>
 			 
+			   <tr><td><a href='../proc/hsexc.html'>HSEXC</a></td><td><a href='../module/gridxc_hybrids.html'>gridxc_hybrids</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/integral.html'>integral</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Function</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/interpolation_local.html'>interpolation_local</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Function</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/locate.html'>locate</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Function</td><td></td></tr>
+			 
 			   <tr><td><a href='../proc/nfft.html'>nfft</a></td><td><a href='../module/gridxc_fft_gpfa.html'>gridxc_fft_gpfa</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/numerov.html'>numerov</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/pbe0xc.html'>PBE0XC</a></td><td><a href='../module/gridxc_hybrids.html'>gridxc_hybrids</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/polint.html'>polint</a></td><td><a href='../module/gridxc_interpolation.html'>gridxc_interpolation</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/set_interpolation.html'>set_interpolation</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/set_mesh.html'>set_mesh</a></td><td><a href='../module/gridxc_mesh1d.html'>gridxc_mesh1D</a></td><td>Subroutine</td><td></td></tr>
 			 
 			   <tr><td><a href='../proc/setgpfa.html'>SETGPFA</a></td><td><a href='../module/gridxc_fft_gpfa.html'>gridxc_fft_gpfa</a></td><td>Subroutine</td><td></td></tr>
 			 
 			   <tr><td><a href='../proc/setgpfa_check.html'>SETGPFA_check</a></td><td><a href='../module/gridxc_fft_gpfa.html'>gridxc_fft_gpfa</a></td><td>Subroutine</td><td></td></tr>
 			 
-			   <tr><td><a href='../proc/setxc.html'>setXC</a></td><td><a href='../module/xcmod.html'>xcmod</a></td><td>Subroutine</td><td><p>Sets the xc functional(s) to be used by atomxc and/or cellxc. 
+			   <tr><td><a href='../proc/setxc.html'>setXC</a></td><td><a href='../module/gridxc_xcmod.html'>gridxc_xcmod</a></td><td>Subroutine</td><td><p>Sets the xc functional(s) to be used by atomxc and/or cellxc. 
  The allowed functional/author values can be seen <a href="../page/02_user_guide/02_api/functionals.html">here</a>.
  Usage example:</p><a href="../proc/setxc.html" class="pull-right"><emph>Read more&hellip;</emph></a></td></tr>
 			 
-			   <tr><td><a href='../proc/setxc_family_authors.html'>setXC_family_authors</a></td><td><a href='../module/xcmod.html'>xcmod</a></td><td>Subroutine</td><td><p>Sets a single XC functional in family/author style.
+			   <tr><td><a href='../proc/setxc_family_authors.html'>setXC_family_authors</a></td><td><a href='../module/gridxc_xcmod.html'>gridxc_xcmod</a></td><td>Subroutine</td><td><p>Sets a single XC functional in family/author style.
   It can only be used for built-in functionals and
   'XC' libXC functionals</p></td></tr>
 			 
-			   <tr><td><a href='../proc/setxc_libxc_ids.html'>setXC_libxc_ids</a></td><td><a href='../module/xcmod.html'>xcmod</a></td><td>Subroutine</td><td><p>Sets the XC info using libxc numerical codes.
+			   <tr><td><a href='../proc/setxc_libxc_ids.html'>setXC_libxc_ids</a></td><td><a href='../module/gridxc_xcmod.html'>gridxc_xcmod</a></td><td>Subroutine</td><td><p>Sets the XC info using libxc numerical codes.
   It can only be used if LibXC support is compiled in</p></td></tr>
+			 
+			   <tr><td><a href='../interface/spline.html'>spline</a></td><td><a href='../module/gridxc_interpolation.html'>gridxc_interpolation</a></td><td>Interface</td><td></td></tr>
+			 
+			   <tr><td><a href='../interface/splint.html'>splint</a></td><td><a href='../module/gridxc_interpolation.html'>gridxc_interpolation</a></td><td>Interface</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/wall_time.html'>wall_time</a></td><td><a href='../module/gridxc_walltime.html'>gridxc_walltime</a></td><td>Subroutine</td><td></td></tr>
+			 
+			   <tr><td><a href='../proc/xwpbe.html'>xwpbe</a></td><td><a href='../module/gridxc_xwpbe.html'>gridxc_xwpbe</a></td><td>Subroutine</td><td></td></tr>
 			 
 			 </tbody></table>
              
@@ -148,7 +190,7 @@ All Procedures &ndash; libGridXC
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

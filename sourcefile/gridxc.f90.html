@@ -68,6 +68,8 @@
             <li><a href="../lists/procedures.html">Procedures</a></li>
         
                
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
         
             </ul>
             </li>
@@ -84,6 +86,8 @@
 <li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
 
                              
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
 
           </ul>
         
@@ -113,7 +117,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 0.3% of total for source files.">16 statements</a>
+    title=" 0.2% of total for source files.">16 statements</a>
      </li> 
      
      
@@ -291,26 +295,26 @@
 <a name="ln-41"></a>
 <a name="ln-42"></a><span class="c">! Real kinds (precision) of arguments</span>
 <a name="ln-43"></a>
-<a name="ln-44"></a>  <span class="k">USE </span><span class="nb">precision</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">dp</span>      <span class="c">! Standard real-kind (double) precision</span>
-<a name="ln-45"></a>  <span class="k">USE </span><span class="nb">precision</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">grid_p</span>  <span class="c">! Precision for grid arrays</span>
+<a name="ln-44"></a>  <span class="k">USE </span><span class="n">gridxc_precision</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">dp</span>      <span class="c">! Standard real-kind (double) precision</span>
+<a name="ln-45"></a>  <span class="k">USE </span><span class="n">gridxc_precision</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">grid_p</span>  <span class="c">! Precision for grid arrays</span>
 <a name="ln-46"></a>
 <a name="ln-47"></a><span class="c">! Main entry routines of gridXC library</span>
 <a name="ln-48"></a><span class="c">!--------------------------------------------------------------</span>
 <a name="ln-49"></a>  <span class="k">use </span><span class="n">gridxc_config</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_init</span>  <span class="c">! initialization</span>
 <a name="ln-50"></a>
 <a name="ln-51"></a>  <span class="c">! XC for a spherical charge distribution</span>
-<a name="ln-52"></a>  <span class="k">USE </span><span class="n">m_atomXC</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_atomXC</span> <span class="o">=&gt;</span> <span class="n">atomXC</span> 
-<a name="ln-53"></a>
-<a name="ln-54"></a>  <span class="k">USE </span><span class="n">m_cellXC</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_cellXC</span> <span class="o">=&gt;</span> <span class="n">cellXC</span>  <span class="c">! XC for a periodic unit cell</span>
-<a name="ln-55"></a>  <span class="k">USE </span><span class="n">xcmod</span><span class="p">,</span>    <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_getXC</span> <span class="o">=&gt;</span> <span class="n">getXC</span>   <span class="c">! Returns XC functional(s)</span>
-<a name="ln-56"></a>  <span class="k">USE </span><span class="n">xcmod</span><span class="p">,</span>    <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_setXC</span> <span class="o">=&gt;</span> <span class="n">setXC</span>   <span class="c">! Sets XC functional(s)</span>
+<a name="ln-52"></a>  <span class="k">USE </span><span class="n">gridxc_atom</span><span class="p">,</span>     <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_atomXC</span> <span class="o">=&gt;</span> <span class="n">atomXC</span> <span class="c">! XC for a radial grid</span>
+<a name="ln-53"></a>  <span class="k">USE </span><span class="n">gridxc_cell</span><span class="p">,</span>     <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_cellXC</span> <span class="o">=&gt;</span> <span class="n">cellXC</span> <span class="c">! XC for a periodic unit cell</span>
+<a name="ln-54"></a>
+<a name="ln-55"></a>  <span class="k">USE </span><span class="n">gridxc_xcmod</span><span class="p">,</span>    <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_getXC</span> <span class="o">=&gt;</span> <span class="n">getXC</span>   <span class="c">! Returns XC functional(s)</span>
+<a name="ln-56"></a>  <span class="k">USE </span><span class="n">gridxc_xcmod</span><span class="p">,</span>    <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_setXC</span> <span class="o">=&gt;</span> <span class="n">setXC</span>   <span class="c">! Sets XC functional(s)</span>
 <a name="ln-57"></a><span class="cp">#ifdef HAVE_LIBXC</span>
-<a name="ln-58"></a>  <span class="k">USE </span><span class="n">xcmod</span><span class="p">,</span>    <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_setXC_libxc</span> <span class="o">=&gt;</span> <span class="n">setXC_libxc_ids</span>   <span class="c">! Sets XC functional(s)</span>
+<a name="ln-58"></a>  <span class="k">USE </span><span class="n">gridxc_xcmod</span><span class="p">,</span>    <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_setXC_libxc</span> <span class="o">=&gt;</span> <span class="n">setXC_libxc_ids</span>   <span class="c">! Sets XC functional(s)</span>
 <a name="ln-59"></a><span class="cp">#endif</span>
 <a name="ln-60"></a>
 <a name="ln-61"></a><span class="c">! Secondary entry points for testers and lower-level programming</span>
-<a name="ln-62"></a>  <span class="k">USE </span><span class="n">m_ldaxc</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_ldaxc</span> <span class="o">=&gt;</span> <span class="n">ldaxc</span>    <span class="c">! LDA-XC functionals</span>
-<a name="ln-63"></a>  <span class="k">USE </span><span class="n">m_ggaxc</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_ggaxc</span> <span class="o">=&gt;</span> <span class="n">ggaxc</span>    <span class="c">! GGA-XC functionals</span>
+<a name="ln-62"></a>  <span class="k">USE </span><span class="n">gridxc_lda</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_ldaxc</span> <span class="o">=&gt;</span> <span class="n">ldaxc</span>    <span class="c">! LDA-XC functionals</span>
+<a name="ln-63"></a>  <span class="k">USE </span><span class="n">gridxc_gga</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">gridxc_ggaxc</span> <span class="o">=&gt;</span> <span class="n">ggaxc</span>    <span class="c">! GGA-XC functionals</span>
 <a name="ln-64"></a>
 <a name="ln-65"></a><span class="c">! Extra utilities placed here for convenience</span>
 <a name="ln-66"></a><span class="c">! See correspondig modules for usage documentation</span>
@@ -318,12 +322,12 @@
 <a name="ln-68"></a><span class="c">!----------------------------------------------------------------------</span>
 <a name="ln-69"></a><span class="c">!-----------------------------------</span>
 <a name="ln-70"></a><span class="cp">#ifdef DEBUG_XC</span>
-<a name="ln-71"></a>  <span class="k">USE </span><span class="n">debugXC</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">setDebugOutputUnit</span>   <span class="c">! Set debug report</span>
-<a name="ln-72"></a>  <span class="k">USE </span><span class="n">debugXC</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">closeDebugOutputFile</span> <span class="c">! Print debug report</span>
+<a name="ln-71"></a>  <span class="k">USE </span><span class="n">gridxc_debugXC</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">setDebugOutputUnit</span>   <span class="c">! Set debug report</span>
+<a name="ln-72"></a>  <span class="k">USE </span><span class="n">gridxc_debugXC</span><span class="p">,</span>  <span class="n">only</span><span class="p">:</span> <span class="n">closeDebugOutputFile</span> <span class="c">! Print debug report</span>
 <a name="ln-73"></a><span class="cp">#endif</span>
-<a name="ln-74"></a>  <span class="k">USE </span><span class="n">mesh3d</span><span class="p">,</span>   <span class="n">only</span><span class="p">:</span> <span class="n">myMeshBox</span>            <span class="c">! Get my processor mesh box</span>
-<a name="ln-75"></a>  <span class="k">USE </span><span class="n">mesh3d</span><span class="p">,</span>   <span class="n">only</span><span class="p">:</span> <span class="n">setMeshDistr</span>         <span class="c">! Set a distribution of mesh</span>
-<a name="ln-76"></a>                                           <span class="c">! points over parallel processors</span>
+<a name="ln-74"></a>  <span class="k">USE </span><span class="n">gridxc_mesh3D</span><span class="p">,</span>   <span class="n">only</span><span class="p">:</span> <span class="n">myMeshBox</span>            <span class="c">! Get my processor mesh box</span>
+<a name="ln-75"></a>  <span class="k">USE </span><span class="n">gridxc_mesh3D</span><span class="p">,</span>   <span class="n">only</span><span class="p">:</span> <span class="n">setMeshDistr</span>         <span class="c">! Set a distribution of mesh</span>
+<a name="ln-76"></a>                                                  <span class="c">! points over parallel processors</span>
 <a name="ln-77"></a>  <span class="k">PUBLIC</span>
 <a name="ln-78"></a>
 <a name="ln-79"></a><span class="k">END MODULE </span><span class="n">gridXC</span>
@@ -340,7 +344,7 @@
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2021 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
+        <div class="col-xs-6 col-md-4"><p>&copy; 2022 <a rel="license" href="http://www.freebsd.org/copyright/freebsd-doc-license.html">FreeBSD Documentation License</a>
                                           </p></div>
         <div class="col-xs-6 col-md-4 col-md-push-4">
           <p class="text-right">

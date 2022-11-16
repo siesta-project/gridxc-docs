@@ -1,6 +1,9 @@
 #if defined HAVE_CONFIG_H
 #include "config.h"
 #endif
+#ifdef HAVE_LIBXC
+#include "xc_version.h"
+#endif
 
 !< Stores the information about the XC functional to use,
 ! and provides routines to set and to get it.
@@ -8,11 +11,11 @@
 ! Note: data is currently global. In future, it will be put into a derived type and
 ! initialized and passed around in a single handle.
 !
-module xcmod
+module gridxc_xcmod
 
-  use precision, only: dp              ! Double precision real kind
-  use sys,       only: die             ! Termination routine
-  use m_vdwxc,   only: vdw_set_author  ! Sets vdW functional flavour
+  use gridxc_precision, only: dp              ! Double precision real kind
+  use gridxc_sys,       only: die             ! Termination routine
+  use gridxc_vdwxc,   only: vdw_set_author  ! Sets vdW functional flavour
 
   implicit none
 
@@ -106,9 +109,12 @@ contains
 !  It can only be used if LibXC support is compiled in
   
   subroutine setXC_libxc_ids( nfuncs, libxc_ids)
-    
+#if XC_MAJOR_VERSION >= 4
+    use xc_f03_lib_m
+#else 
     use xc_f90_types_m
     use xc_f90_lib_m
+#endif
 
     implicit none
     !> number of functionals
@@ -117,11 +123,17 @@ contains
     integer, intent(in) :: libxc_ids(nfuncs)
 
     ! automatic arrays
-    character(len=10)   :: family(nfuncs), auth(nfuncs)
+    character(len=11)   :: family(nfuncs), auth(nfuncs)
     real(dp)            :: weight_x(nfuncs), weight_c(nfuncs)
     
+#if XC_MAJOR_VERSION >= 4
+    type(xc_f03_func_t) :: xc_func
+    type(xc_f03_func_info_t) :: xc_info
+#else
     type(xc_f90_pointer_t) :: xc_func, xc_info
+#endif
     integer :: xc_ispin
+    integer :: kind, ifamily
     integer :: i
 
     do i = 1, nfuncs
@@ -131,9 +143,18 @@ contains
        xc_ispin = XC_UNPOLARIZED 
        ! 'unpolarized' is the least stringent option: for non-polarized
        ! functionals, the other option might result in an error
+#if XC_MAJOR_VERSION >= 4
+       call xc_f03_func_init(xc_func, libxc_ids(i), xc_ispin)
+       xc_info = xc_f03_func_get_info(xc_func)
+       kind = xc_f03_func_info_get_kind(xc_info)
+       ifamily = xc_f03_func_info_get_family(xc_info)
+#else
        call xc_f90_func_init(xc_func, xc_info, libxc_ids(i), xc_ispin)
+       kind = xc_f90_info_kind(xc_info)
+       ifamily = xc_f90_family_from_id(libxc_ids(i))
+#endif
        
-       select case (xc_f90_info_kind(xc_info))
+       select case (kind)
        case (XC_CORRELATION)
           weight_x(i) = 0.0_dp
           weight_c(i) = 1.0_dp
@@ -146,20 +167,26 @@ contains
        case default
           call die("Functional kind not supported")
        end select
+#if XC_MAJOR_VERSION >= 4
+       call xc_f03_func_end(xc_func)
+#else
        call xc_f90_func_end(xc_func)
+#endif
 
-       select case (xc_f90_family_from_id (libxc_ids(i)))
+       select case ( ifamily )
        case (XC_FAMILY_LDA)
           family(i) = "LDA"
        case (XC_FAMILY_GGA)
           family(i) = "GGA"
+       case (XC_FAMILY_HYB_GGA)
+          family(i) = "GGA"
        ! There is probably a (negative) case for bad id ...
-       case (-1)
+       case (XC_FAMILY_UNKNOWN)
           call die("Bad libxc functional code")
        case default
           family(i) = "other"
        end select
-       write(auth(i),"(a,i4.4)") "LIBXC-", libxc_ids(i)
+       write(auth(i),"(a,i5.5)") "LIBXC-", libxc_ids(i)
     end do
 
     if (sum(weight_x(1:nfuncs)) /= 1.0_dp) then
@@ -220,64 +247,79 @@ contains
   
   subroutine process_libxc_spec(func,auth)
 
+#if XC_MAJOR_VERSION >= 4
+    use xc_f03_lib_m
+#else
     use xc_f90_types_m
     use xc_f90_lib_m
+#endif
 
     character(len=*), intent(in)    :: func
     character(len=*), intent(inout) ::  auth
 
     integer :: iostat, xc_id, idx, xc_id_from_symbol
+    integer :: family
     character(len=50) :: symbolic_name
 
-         ! Fields are of the form LIBXC-XXXX-SYMBOL
-         ! where -SYMBOL is optional if XXXX is a meaningful code
-         idx = index(auth(7:),"-")
-         if (idx /= 0) then
-            ! We have code and symbol fields
-            read(auth(7:7+idx-2),iostat=iostat,fmt=*) xc_id
-            symbolic_name = auth(7+idx:)
-            xc_id_from_symbol = xc_f90_functional_get_number(symbolic_name)
-            if (xc_id == 0) then
-               ! A zero in the code field signals that we want
-               ! to fall back on the symbolic name field 
-               if (xc_id_from_symbol < 0) then
-                  call die("Cannot get xc_id from " // &
-                       trim(symbolic_name))
-               else
-                  xc_id = xc_id_from_symbol
-               endif
-            else
-               ! Check consistency
-               if (xc_id /= xc_id_from_symbol) then
-                  call die("Conflicting code field for " // &
-                       trim(symbolic_name))
-               endif
-            endif
-            ! Normalize the internal representation 
-            write(auth,"(a,i4.4,'-',a)") &
-                 "LIBXC-",xc_id, trim(symbolic_name)
-         else
-            ! Just a code field
-            read(auth(7:),iostat=iostat,fmt=*) xc_id
-            if (iostat /= 0) call die("Bad libxc code in " &
-                                   // trim(auth))
-            ! Normalize the internal representation 
-            write(auth,"(a,i4.4)") "LIBXC-",xc_id
-         endif
+    ! Fields are of the form LIBXC-XXXX-SYMBOL
+    ! where -SYMBOL is optional if XXXX is a meaningful code
+    idx = index(auth(7:),"-")
+    if (idx /= 0) then
+      ! We have code and symbol fields
+      read(auth(7:7+idx-2),iostat=iostat,fmt=*) xc_id
+      symbolic_name = auth(7+idx:)
+#if XC_MAJOR_VERSION >= 4
+      xc_id_from_symbol = xc_f03_functional_get_number(symbolic_name)
+#else
+      xc_id_from_symbol = xc_f90_functional_get_number(symbolic_name)
+#endif
+      if (xc_id == 0) then
+        ! A zero in the code field signals that we want
+        ! to fall back on the symbolic name field 
+        if (xc_id_from_symbol < 0) then
+          call die("Cannot get xc_id from " // &
+              trim(symbolic_name))
+        else
+          xc_id = xc_id_from_symbol
+        endif
+      else
+        ! Check consistency
+        if (xc_id /= xc_id_from_symbol) then
+          call die("Conflicting code field for " // &
+              trim(symbolic_name))
+        endif
+      endif
+      ! Normalize the internal representation 
+      write(auth,"(a,i5.5,'-',a)") &
+          "LIBXC-",xc_id, trim(symbolic_name)
+    else
+      ! Just a code field
+      read(auth(7:),iostat=iostat,fmt=*) xc_id
+      if (iostat /= 0) call die("Bad libxc code in " &
+          // trim(auth))
+      ! Normalize the internal representation 
+      write(auth,"(a,i5.5)") "LIBXC-",xc_id
+    endif
 
-         !
-         select case (xc_f90_family_from_id (xc_id))
-         case (XC_FAMILY_LDA)
-            if (func /= "LDA") call die("Family mismatch in " // &
-                  trim(func) // " " // trim(auth))
-         case (XC_FAMILY_GGA)
-            if (func /= "GGA") call die("Family mismatch in " // &
-                  trim(func) // " " // trim(auth))
-         case default
-            call die("Unsupported Libxc family or functional")
-         end select
+#if XC_MAJOR_VERSION >= 4
+    family = xc_f03_family_from_id (xc_id)
+#else
+    family = xc_f90_family_from_id (xc_id)
+#endif
+
+    select case ( family )
+    case (XC_FAMILY_LDA)
+      if (func /= "LDA") call die("Family mismatch in " // &
+          trim(func) // " " // trim(auth))
+    case (XC_FAMILY_GGA, XC_FAMILY_HYB_GGA)
+      if (func /= "GGA") call die("Family mismatch in " // &
+          trim(func) // " " // trim(auth))
+    case default
+      call die("Unsupported Libxc family or functional")
+    end select
+
   end subroutine process_libxc_spec
 
 #endif
   
-end module xcmod
+end module gridxc_xcmod

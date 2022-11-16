@@ -2,7 +2,11 @@
 #include "config.h"
 #endif
 
-MODULE m_atomXC
+#ifdef HAVE_LIBXC
+#include "xc_version.h"
+#endif
+
+MODULE gridxc_atom
 
   implicit none
 
@@ -48,41 +52,45 @@ CONTAINS
 subroutine atomXC( irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc )
 
 ! Module routines
-  use alloc,   only: alloc_default ! Sets (re)allocation defaults
-  use alloc,   only: de_alloc      ! Deallocates arrays
-  use mesh1d,  only: derivative    ! Performs numerical derivative
-  use sys,     only: die           ! Termination routine
-  use xcmod,   only: getXC         ! Returns the XC functional to be used
-  use m_ggaxc, only: ggaxc         ! General GGA XC routine
-  use mesh1d,  only: interpolation=>interpolation_local ! Interpolation routine
-  use m_ldaxc, only: ldaxc         ! General LDA XC routine
-!  use m_filter,only: kcPhi         ! Finds planewave cutoff of a radial func.
-  use m_radfft,only: radfft        ! Radial fast Fourier transform
-  use alloc,   only: re_alloc      ! Reallocates arrays
-  use mesh1d,  only: set_mesh      ! Sets a one-dimensional mesh
-  use mesh1d,  only: set_interpolation  ! Sets the interpolation method
-  use m_vdwxc, only: vdw_decusp    ! Cusp correction to VDW energy
-  use m_vdwxc, only: vdw_localxc   ! Local LDA/GGA xc apropriate for vdW flavour
-  use m_vdwxc, only: vdw_get_qmesh ! Returns q-mesh for VDW integrals
-  use m_vdwxc, only: vdw_phi       ! Returns VDW functional kernel
-  use m_vdwxc, only: vdw_set_kcut  ! Fixes k-cutoff in VDW integrals
-  use m_vdwxc, only: vdw_theta     ! Returns VDW theta function
+  use gridxc_alloc,   only: alloc_default ! Sets (re)allocation defaults
+  use gridxc_alloc,   only: de_alloc      ! Deallocates arrays
+  use gridxc_mesh1D,  only: derivative    ! Performs numerical derivative
+  use gridxc_sys,     only: die           ! Termination routine
+  use gridxc_xcmod,   only: getXC         ! Returns the XC functional to be used
+  use gridxc_gga,     only: ggaxc         ! General GGA XC routine
+  use gridxc_mesh1D,  only: interpolation=>interpolation_local ! Interpolation routine
+  use gridxc_lda,     only: ldaxc         ! General LDA XC routine
+!  use gridxc_filter,only: kcPhi         ! Finds planewave cutoff of a radial func.
+  use gridxc_radfft,  only: radfft        ! Radial fast Fourier transform
+  use gridxc_alloc,   only: re_alloc      ! Reallocates arrays
+  use gridxc_mesh1D,  only: set_mesh      ! Sets a one-dimensional mesh
+  use gridxc_mesh1D,  only: set_interpolation  ! Sets the interpolation method
+  use gridxc_vdwxc, only: vdw_decusp    ! Cusp correction to VDW energy
+  use gridxc_vdwxc, only: vdw_localxc   ! Local LDA/GGA xc apropriate for vdW flavour
+  use gridxc_vdwxc, only: vdw_get_qmesh ! Returns q-mesh for VDW integrals
+  use gridxc_vdwxc, only: vdw_phi       ! Returns VDW functional kernel
+  use gridxc_vdwxc, only: vdw_set_kcut  ! Fixes k-cutoff in VDW integrals
+  use gridxc_vdwxc, only: vdw_theta     ! Returns VDW theta function
 
 ! Module types and variables
-  use precision, only: dp          ! Double precision real type
-  use alloc,   only: allocDefaults ! Derived type for allocation defaults
+  use gridxc_precision, only: dp          ! Double precision real type
+  use gridxc_alloc,   only: allocDefaults ! Derived type for allocation defaults
   use gridxc_config, only: myNode => gridxc_myNode
 
 #ifdef DEBUG_XC
-!  use m_vdwxc, only: qofrho        ! Returns q(rho,grad_rho)
+!  use gridxc_vdwxc, only: qofrho        ! Returns q(rho,grad_rho)
 
-  use debugXC, only: udebug        ! Output file unit for debug info
-  use debugXC, only: setDebugOutputUnit  ! Sets udebug
+  use gridxc_debugXC, only: udebug        ! Output file unit for debug info
+  use gridxc_debugXC, only: setDebugOutputUnit  ! Sets udebug
 #endif /* DEBUG_XC */
 
 #ifdef HAVE_LIBXC
-  use xc_f90_types_m
-  use xc_f90_lib_m
+#if XC_MAJOR_VERSION >= 4
+    use xc_f03_lib_m
+#else
+    use xc_f90_types_m
+    use xc_f90_lib_m
+#endif
 #endif /* HAVE_LIBXC */
 
   implicit none
@@ -168,7 +176,12 @@ subroutine atomXC( irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc )
 #endif /* DEBUG_XC */
 
 #ifdef HAVE_LIBXC
+#if XC_MAJOR_VERSION >= 4
+      type(xc_f03_func_t), allocatable :: xc_func(:)
+      type(xc_f03_func_info_t), allocatable :: xc_info(:)
+#else
       type(xc_f90_pointer_t), allocatable :: xc_func(:), xc_info(:)
+#endif
       logical, allocatable                :: is_libxc(:)
       integer :: xc_ispin, xc_id, iostat
 #endif
@@ -211,7 +224,7 @@ subroutine atomXC( irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc )
   do nf = 1,nXCfunc
       if ( XCauth(nf)(1:5) == 'LIBXC') then
 #ifdef HAVE_LIBXC
-      read(XCauth(nf)(7:10),iostat=iostat,fmt=*) xc_id
+      read(XCauth(nf)(7:11),iostat=iostat,fmt=*) xc_id
       if (iostat /= 0) call die("Bad libxc code in " // XCauth(nf))
         IF (nspin == 1) THEN
           xc_ispin = XC_UNPOLARIZED
@@ -219,14 +232,14 @@ subroutine atomXC( irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc )
           xc_ispin = XC_POLARIZED
         ENDIF
 
-#include "xc_version.h"
-#if    XC_MAJOR_VERSION >= 4           
+#if XC_MAJOR_VERSION >= 4           
         if ((irel == 1) .and. (xc_id == 1)) then
            ! Change LDA_X to LDA_X_REL (532)
            ! This was introduced in libXC v4
            xc_id = 532
         endif
-        call xc_f90_func_init(xc_func(nf), xc_info(nf), xc_id, xc_ispin)
+        call xc_f03_func_init(xc_func(nf), xc_id, xc_ispin)
+        xc_info(nf) = xc_f03_func_get_info(xc_func(nf))
 #else
         call xc_f90_func_init(xc_func(nf), xc_info(nf), xc_id, xc_ispin)
         if ((irel == 1) .and. (xc_id == 1)) then
@@ -586,9 +599,13 @@ subroutine atomXC( irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc )
 
 #ifdef HAVE_LIBXC
   do nf = 1,nXCfunc
-     if (is_libxc(nf)) then
-        call xc_f90_func_end(xc_func(nf))
-     endif
+    if (is_libxc(nf)) then
+#if XC_MAJOR_VERSION >= 4
+      call xc_f03_func_end(xc_func(nf))
+#else
+      call xc_f90_func_end(xc_func(nf))
+#endif
+    endif
   enddo
   deallocate(xc_func,xc_info,is_libxc)
 #endif
@@ -661,6 +678,6 @@ subroutine atomXC( irel, nr, maxr, rmesh, nSpin, Dens, Ex, Ec, Dx, Dc, Vxc )
 
 end subroutine atomXC
 
-END MODULE m_atomXC
+END MODULE gridxc_atom
 
 

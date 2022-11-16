@@ -41,26 +41,26 @@ MODULE gridXC
 
 ! Real kinds (precision) of arguments
 
-  USE precision, only: dp      ! Standard real-kind (double) precision
-  USE precision, only: grid_p  ! Precision for grid arrays
+  USE gridxc_precision, only: dp      ! Standard real-kind (double) precision
+  USE gridxc_precision, only: grid_p  ! Precision for grid arrays
 
 ! Main entry routines of gridXC library
 !--------------------------------------------------------------
   use gridxc_config, only: gridxc_init  ! initialization
 
   ! XC for a spherical charge distribution
-  USE m_atomXC, only: gridxc_atomXC => atomXC 
+  USE gridxc_atom,     only: gridxc_atomXC => atomXC ! XC for a radial grid
+  USE gridxc_cell,     only: gridxc_cellXC => cellXC ! XC for a periodic unit cell
 
-  USE m_cellXC, only: gridxc_cellXC => cellXC  ! XC for a periodic unit cell
-  USE xcmod,    only: gridxc_getXC => getXC   ! Returns XC functional(s)
-  USE xcmod,    only: gridxc_setXC => setXC   ! Sets XC functional(s)
+  USE gridxc_xcmod,    only: gridxc_getXC => getXC   ! Returns XC functional(s)
+  USE gridxc_xcmod,    only: gridxc_setXC => setXC   ! Sets XC functional(s)
 #ifdef HAVE_LIBXC
-  USE xcmod,    only: gridxc_setXC_libxc => setXC_libxc_ids   ! Sets XC functional(s)
+  USE gridxc_xcmod,    only: gridxc_setXC_libxc => setXC_libxc_ids   ! Sets XC functional(s)
 #endif
 
 ! Secondary entry points for testers and lower-level programming
-  USE m_ldaxc,  only: gridxc_ldaxc => ldaxc    ! LDA-XC functionals
-  USE m_ggaxc,  only: gridxc_ggaxc => ggaxc    ! GGA-XC functionals
+  USE gridxc_lda,  only: gridxc_ldaxc => ldaxc    ! LDA-XC functionals
+  USE gridxc_gga,  only: gridxc_ggaxc => ggaxc    ! GGA-XC functionals
 
 ! Extra utilities placed here for convenience
 ! See correspondig modules for usage documentation
@@ -68,12 +68,12 @@ MODULE gridXC
 !----------------------------------------------------------------------
 !-----------------------------------
 #ifdef DEBUG_XC
-  USE debugXC,  only: setDebugOutputUnit   ! Set debug report
-  USE debugXC,  only: closeDebugOutputFile ! Print debug report
+  USE gridxc_debugXC,  only: setDebugOutputUnit   ! Set debug report
+  USE gridxc_debugXC,  only: closeDebugOutputFile ! Print debug report
 #endif
-  USE mesh3d,   only: myMeshBox            ! Get my processor mesh box
-  USE mesh3d,   only: setMeshDistr         ! Set a distribution of mesh
-                                           ! points over parallel processors
+  USE gridxc_mesh3D,   only: myMeshBox            ! Get my processor mesh box
+  USE gridxc_mesh3D,   only: setMeshDistr         ! Set a distribution of mesh
+                                                  ! points over parallel processors
   PUBLIC
 
 END MODULE gridXC

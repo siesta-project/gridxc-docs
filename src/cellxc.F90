@@ -1,8 +1,11 @@
 #if defined HAVE_CONFIG_H
 #include "config.h"
 #endif
+#ifdef HAVE_LIBXC
+#include "xc_version.h"
+#endif
 
-MODULE m_cellXC
+MODULE gridxc_cell
 
   implicit none
 
@@ -58,12 +61,15 @@ CONTAINS ! nothing else but public routine cellXC
 ! ************************* OPTIONAL INPUT *************************
 ! logical keep_input_distribution :  Avoid internal load-balancer and lock
 !                                    the passed parallel distribution
-!                                    (for LDA calculations only)
 ! ************************* OPTIONAL OUTPUT *************************
 ! real(grid_p) dVxcdD(lb1:ub1,lb2:ub2,lb3:ub3,nSpin*nSpin) : Derivatives
 !                           of xc potential respect to charge density
 !                           Available only for LDA (libxc + built-in CA/PZ)
 !                           and collinear-spin
+! *** OPTIONAL OUTPUT (must set keep_input_distribution=.true.) *****
+! real(grid_p) epsxc(lb1:ub1,lb2:ub2,lb3:ub3) : XC energy density per electron
+! real(grid_p) dexcdGD(lb1:ub1,lb2:ub2,lb3:ub3,3,nspin) 
+!                                 d(n*epsxc)/dGradD  (Notation: exc = n*epsxc)
 ! ************************ UNITS ************************************
 ! Distances in atomic units (Bohr).
 ! Densities in atomic units (electrons/Bohr**3)
@@ -110,62 +116,65 @@ CONTAINS ! nothing else but public routine cellXC
   
 SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
                    nSpin, dens, Ex, Ec, Dx, Dc, stress, Vxc, dVxcdD, &
-                   keep_input_distribution )
-
+                   epsxc, dexcdGD, keep_input_distribution )
   ! Module routines
 
   use gridxc_config,  only: nodes=>gridxc_totNodes ! Number of processor nodes
   use gridxc_config,  only: myNode=>gridxc_myNode ! My node
-  use mesh3D,  only: addMeshData   ! Accumulates a mesh array
-  use alloc,   only: alloc_default ! Sets (re)allocation defaults
-  use mesh3D,  only: associateMeshTask ! Associates mesh tasks & distr.
-  use mesh3D,  only: copyMeshData  ! Copies a box of a mesh array
-  use alloc,   only: de_alloc      ! Deallocates arrays
-  use sys,     only: die           ! Termination routine
-  use fftr,    only: fftk2r        ! Inverse real Fourier transform
-  use fftr,    only: fftr2k        ! Direct real Fourier transform
-  use mesh3D,  only: fftMeshDistr  ! Sets/gets distribution for FFTs
-  use mesh3D,  only: freeMeshDistr ! Frees a mesh distribution ID
-  use moreParallelSubs, only: miscAllReduce ! Adds variables from all processes
-  use xcmod,   only: getXC         ! Returns the XC functional to be used
-  use m_ggaxc, only: ggaxc         ! General GGA XC routine
-  use m_ldaxc, only: ldaxc         ! General LDA XC routine
-  use m_chkgmx,only: meshKcut      ! Returns the planewave cutoff of a mesh
-  use mesh3D,  only: myMeshBox     ! Returns the mesh box of my processor
+  use gridxc_mesh3D,  only: addMeshData   ! Accumulates a mesh array
+  use gridxc_alloc,   only: alloc_default ! Sets (re)allocation defaults
+  use gridxc_mesh3D,  only: associateMeshTask ! Associates mesh tasks & distr.
+  use gridxc_mesh3D,  only: copyMeshData  ! Copies a box of a mesh array
+  use gridxc_alloc,   only: de_alloc      ! Deallocates arrays
+  use gridxc_sys,     only: die           ! Termination routine
+  use gridxc_fftr,    only: fftk2r        ! Inverse real Fourier transform
+  use gridxc_fftr,    only: fftr2k        ! Direct real Fourier transform
+  use gridxc_mesh3D,  only: fftMeshDistr  ! Sets/gets distribution for FFTs
+  use gridxc_mesh3D,  only: freeMeshDistr ! Frees a mesh distribution ID
+  use gridxc_moreParallelSubs, only: miscAllReduce ! Adds variables from all processes
+  use gridxc_xcmod,   only: getXC         ! Returns the XC functional to be used
+  use gridxc_gga,     only: ggaxc         ! General GGA XC routine
+  use gridxc_lda,     only: ldaxc         ! General LDA XC routine
+  use gridxc_chkgmx,only: meshKcut      ! Returns the planewave cutoff of a mesh
+  use gridxc_mesh3D,  only: myMeshBox     ! Returns the mesh box of my processor
 #ifdef DEBUG_XC
-! use moreParallelSubs, only: nodeString ! Returns a string with my node number
-  use m_vdwxc, only: qofrho        ! For debugging only
+! use gridxc_moreParallelSubs, only: nodeString ! Returns a string with my node number
+  use gridxc_vdwxc, only: qofrho        ! For debugging only
 #endif /* DEBUG_XC */
-  use alloc,   only: re_alloc      ! Reallocates arrays
-  use cellsubs,only: reclat        ! Finds reciprocal unit cell vectors
-  use mesh3D,  only: sameMeshDistr ! Finds if two mesh distr. are equal
-  use mesh3D,  only: setMeshDistr  ! Defines a new mesh distribution
+  use gridxc_alloc,   only: re_alloc      ! Reallocates arrays
+  use gridxc_cellsubs,only: reclat        ! Finds reciprocal unit cell vectors
+  use gridxc_mesh3D,  only: sameMeshDistr ! Finds if two mesh distr. are equal
+  use gridxc_mesh3D,  only: setMeshDistr  ! Defines a new mesh distribution
 #ifdef DEBUG_XC
-  use debugXC, only: setDebugOutputUnit ! Sets udebug variable
+  use gridxc_debugXC, only: setDebugOutputUnit ! Sets udebug variable
 #endif /* DEBUG_XC */
   ! To pass info to the caller
-  use sys, only: timer_start=>gridxc_timer_start       ! Starts counting time
-  use sys, only: timer_stop=>gridxc_timer_stop        ! Stops counting time
+  use gridxc_sys, only: timer_start=>gridxc_timer_start       ! Starts counting time
+  use gridxc_sys, only: timer_stop=>gridxc_timer_stop        ! Stops counting time
 
-  use m_vdwxc, only: vdw_localxc   ! Local LDA/GGA xc apropriate for vdW flavour
-  use m_vdwxc, only: vdw_decusp    ! Cusp correction to VDW energy
-  use m_vdwxc, only: vdw_get_qmesh ! Returns q-mesh for VDW integrals
-  use m_vdwxc, only: vdw_phi       ! Returns VDW functional kernel
-  use m_vdwxc, only: vdw_set_kcut  ! Fixes k-cutoff in VDW integrals
-  use m_vdwxc, only: vdw_theta     ! Returns VDW theta function
-  use cellsubs,only: volcel        ! Finds volume of unit cell
+  use gridxc_vdwxc, only: vdw_localxc   ! Local LDA/GGA xc apropriate for vdW flavour
+  use gridxc_vdwxc, only: vdw_decusp    ! Cusp correction to VDW energy
+  use gridxc_vdwxc, only: vdw_get_qmesh ! Returns q-mesh for VDW integrals
+  use gridxc_vdwxc, only: vdw_phi       ! Returns VDW functional kernel
+  use gridxc_vdwxc, only: vdw_set_kcut  ! Fixes k-cutoff in VDW integrals
+  use gridxc_vdwxc, only: vdw_theta     ! Returns VDW theta function
+  use gridxc_cellsubs,only: volcel        ! Finds volume of unit cell
 
   ! Module types and variables
-  use alloc,     only: allocDefaults ! Derived type for allocation defaults
-  use precision, only: dp            ! Double precision real type
-  use precision, only: gp=>grid_p    ! Real precision type of mesh arrays
+  use gridxc_alloc,     only: allocDefaults ! Derived type for allocation defaults
+  use gridxc_precision, only: dp            ! Double precision real type
+  use gridxc_precision, only: gp=>grid_p    ! Real precision type of mesh arrays
 #ifdef DEBUG_XC
-  use debugXC,   only: udebug        ! Output file unit for debug info
+  use gridxc_debugXC,   only: udebug        ! Output file unit for debug info
 #endif /* DEBUG_XC */
 
 #ifdef HAVE_LIBXC
-  use xc_f90_types_m
-  use xc_f90_lib_m
+#if XC_MAJOR_VERSION >= 4
+    use xc_f03_lib_m
+#else 
+    use xc_f90_types_m
+    use xc_f90_lib_m
+#endif
 #endif
 
   implicit none
@@ -192,6 +201,13 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
   real(gp),intent(out),optional:: &  ! dVxc/dDens (LDA,nspin<=2 only: libxc + built-in CA/PZ)
                          dVxcdD(0:ub1-lb1,0:ub2-lb2,0:ub3-lb3,1:nSpin**2) 
   logical, intent(in),optional::  keep_input_distribution ! Avoid internal load-balancer
+!< XC energy density per electron (Notation: exc = n*epsxc is the XC energy density)
+  real(gp),intent(out),optional :: &  ! exc(r): XC energy density per electron
+       epsxc(0:ub1-lb1,0:ub2-lb2,0:ub3-lb3)
+!< d(n*epsxc)/dGradD  (Derivative of exc with respect to the gradient of n)
+  real(gp),intent(out),optional :: &  ! d(n*epsxc)/dGradD  (Notation: exc = n*epsxc)
+                         dexcdGD(0:ub1-lb1,0:ub2-lb2,0:ub3-lb3,3,nspin) 
+
 
   ! Fix the order of the numerical derivatives
   ! nn is the number of points used in each coordinate and direction,
@@ -254,6 +270,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
      tq=>null(), uq=>null(), &
      Vleft=>null(), Vleft1=>null(), Vleft2=>null(), Vleft3=>null(), &
      Vrght=>null(), Vrght1=>null(), Vrght2=>null(), Vrght3=>null()
+  
   logical, pointer:: &
      nonempty(:,:,:)=>null()
 
@@ -301,9 +318,14 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
 #endif /* DEBUG_XC */
 
 #ifdef HAVE_LIBXC
-      type(xc_f90_pointer_t), allocatable :: xc_func(:), xc_info(:)
-      logical, allocatable                :: is_libxc(:)
-      integer :: xc_ispin, xc_id, iostat
+#if XC_MAJOR_VERSION >= 4
+  type(xc_f03_func_t), allocatable :: xc_func(:)
+  type(xc_f03_func_info_t), allocatable :: xc_info(:)
+#else
+  type(xc_f90_pointer_t), allocatable :: xc_func(:), xc_info(:)
+#endif
+  logical, allocatable :: is_libxc(:)
+  integer :: xc_ispin, xc_id, iostat
 #endif
 
   ! Start time counter
@@ -375,7 +397,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
   do nf = 1,nXCfunc
       if ( XCauth(nf)(1:5) == 'LIBXC') then
 #ifdef HAVE_LIBXC
-      read(XCauth(nf)(7:10),iostat=iostat,fmt=*) xc_id
+      read(XCauth(nf)(7:11),iostat=iostat,fmt=*) xc_id
       if (iostat /= 0) call die("Bad libxc code in " // XCauth(nf))
         IF (nspin == 1) THEN
           xc_ispin = XC_UNPOLARIZED
@@ -383,14 +405,14 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
           xc_ispin = XC_POLARIZED
         ENDIF
 
-#include "xc_version.h"
 #if    XC_MAJOR_VERSION >= 4           
         if ((irel == 1) .and. (xc_id == 1)) then
            ! Change LDA_X to LDA_X_REL (532)
            ! This was introduced in libXC v4
            xc_id = 532
         endif
-        call xc_f90_func_init(xc_func(nf), xc_info(nf), xc_id, xc_ispin)
+        call xc_f03_func_init(xc_func(nf), xc_id, xc_ispin)
+        xc_info(nf) = xc_f03_func_get_info(xc_func(nf))
 #else
         call xc_f90_func_init(xc_func(nf), xc_info(nf), xc_id, xc_ispin)
         if ((irel == 1) .and. (xc_id == 1)) then
@@ -430,6 +452,14 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
 
   else
 
+     ! Sanity check to avoid complicated code
+     if (present(dexcdGD)) then
+        call die("Have to lock input distribution for dexcdGD output")
+     endif
+     if (present(epsxc)) then
+        call die("Have to lock input distribution for epsxc output")
+     endif
+     
   ! If nMesh has changed, use input distribution also initially as myDistr
   if (any(nMesh/=oldMesh)) call setMeshDistr( myDistr, nMesh, ioBox )
   oldMesh = nMesh
@@ -495,7 +525,11 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
 
   ! Allocate myDens and myVxc arrays if either:
   ! - The parallel mesh distribution is changed internally (even with LDA)
+  !   This is needed to perform the calculations in the new distribution.
   ! - We need finite differences (GGA) and have a distributed mesh
+  !   In this case there is no extra distribution, but for the bookeeping
+  !   of boundaries it is advantageous to have new arrays with absolute indexes.
+  
   if (.not.sameMeshDistr(myDistr,ioDistr) .or. (GGA .and. myDistr/=0)) then
 
     m11=myBox(1,1); m12=myBox(1,2); m13=myBox(1,3)
@@ -506,6 +540,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
     if (present(dVxcdD)) &
       call re_alloc( mydVxcdD, m11,m21, m12,m22, m13,m23, 1,ns**2, &
                      myName//'mydVxcdD'  )
+    
     ! Allocate arrays for density and potential in neighbor regions
     if (GGA) then
       l11=m11-nn;     l12=m12-nn;     l13=m13-nn
@@ -528,6 +563,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
   end if ! (myDistr/=ioDistr .or. GGA)
 
   ! Redistribute dens data
+  ! This is a no-op if we have not changed the distribution
   if (associated(myDens)) then
     call associateMeshTask( io2my, ioDistr, myDistr )
     call copyMeshData( nMesh, ioDistr, dens, myBox, myDens, io2my )
@@ -604,6 +640,8 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
   stress(:,:) = 0.0_dp
   Vxc(:,:,:,:) = 0.0_gp
   if (present(dVxcdD)) dVxcdD(:,:,:,:) = 0.0_gp
+  if (present(epsxc)) epsxc(:,:,:) = 0.0_gp
+  if (present(dexcdGD)) dexcdGD(:,:,:,:,:) = 0.0_gp
 
   ! VdW initializations -------------------------------------------------------
   if (VDW) then
@@ -750,7 +788,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
     ! Fourier-tranform theta_iq(r)
     do iq = 1,nq
       ! Unpack nonempty points into a full-mesh array
-      ! Last index (=1) is just because fftr2k expects a rank 4 array
+      ! Last index (=1) is just because gridxc_fftr2k expects a rank 4 array
 !      tq(0:myMesh(1)-1,0:myMesh(2)-1,0:myMesh(3)-1,1) = &  ! Slower!!!
 !        unpack( tvdw(1:nonemptyPoints,iq), mask=nonempty, field=tvac(iq) )
       ip = 0
@@ -906,6 +944,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
 !  call timer_start( 'cellXC3' )
 #endif /* DEBUG_XC */
 
+  
   ! Loop on mesh points -------------------------------------------------------
   ip = 0
   do i3 = 0,myMesh(3)-1   ! Mesh indexes relative to my box origin
@@ -1046,6 +1085,14 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
       ! derivatives with respect to density at this point
       Ex = Ex + dVol * Dtot * epsX
       Ec = Ec + dVol * Dtot * epsC
+
+      if (present(epsxc)) then
+         epsxc(i1,i2,i3) = epsX + epsC
+      endif
+      if (present(dexcdGD)) then
+         dexcdGD(i1,i2,i3,:,:) = dExdGD(:,:) + dEcdGD(:,:)
+      endif
+
       Dx = Dx + dVol * Dtot * epsX
       Dc = Dc + dVol * Dtot * epsC
       Dx = Dx - dVol * sum(D(:)*dExdD(:))
@@ -1055,6 +1102,7 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
       else  ! Add directly to output array Vxc
         Vxc(i1,i2,i3,:) = Vxc(i1,i2,i3,:) + dExdD(:) + dEcdD(:)
       end if ! (associated(myVxc))
+
       if (present(dVxcdD)) then
         if (associated(mydVxcdD)) then
           mydVxcdD(ii1,ii2,ii3,:) = mydVxcdD(ii1,ii2,ii3,:) + dVxdD(:)+dVcdD(:)
@@ -1155,9 +1203,13 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
 
 #ifdef HAVE_LIBXC
   do nf = 1,nXCfunc
-     if (is_libxc(nf)) then
-        call xc_f90_func_end(xc_func(nf))
-     endif
+    if (is_libxc(nf)) then
+#if XC_MAJOR_VERSION >= 4
+      call xc_f03_func_end(xc_func(nf))
+#else
+      call xc_f90_func_end(xc_func(nf))
+#endif
+    endif
   enddo
   deallocate(xc_func,xc_info,is_libxc)
 #endif
@@ -1236,10 +1288,8 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
       ! Copy myVxc and dVxcdD to output box
       call associateMeshTask( my2io, myDistr )
       call copyMeshData( nMesh, myDistr, myVxc, ioBox, Vxc, my2io )
-!      call copyMeshData( nMesh, myDistr, myVxc, ioBox, Vxc )
       if (present(dVxcdD)) &
         call copyMeshData( nMesh, myDistr, mydVxcdD, ioBox, dVxcdD, my2io )
-!        call copyMeshData( nMesh, myDistr, mydVxcdD, ioBox, dVxcdD )
     end if ! (sameMeshDistr(ioDistr,myDistr))
   end if ! (associated(myVxc))
 
@@ -1274,6 +1324,8 @@ SUBROUTINE cellXC( irel, cell, nMesh, lb1, ub1, lb2, ub2, lb3, ub3, &
   Vxc = Vxc / Eunit
   stress = stress / Eunit
   if (present(dVxcdD)) dVxcdD = dVxcdD / Eunit
+  if (present(epsxc)) epsxc = epsxc / Eunit
+  if (present(dexcdGD)) dexcdGD = dexcdGD / Eunit
 
   ! Deallocate VDW-related arrays
   if (VDW) then
@@ -1421,4 +1473,4 @@ CONTAINS !---------------------------------------------------------------------
 
 END SUBROUTINE cellXC
 
-END MODULE m_cellXC
+END MODULE gridxc_cell
